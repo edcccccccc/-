@@ -8,233 +8,181 @@
 <style>
 body {
     margin: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f2f2f2;
     font-family: "Microsoft YaHei", sans-serif;
-    padding-bottom: 70px;
+    padding-bottom: 60px;
 }
 
 /* 顶部标题 */
 .header {
-    background: white;
-    padding: 20px;
+    background: #fff;
+    padding: 16px;
     text-align: center;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: #333;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 2;
-}
-
-/* 模式切换按钮 */
-.mode-switcher {
-    display: flex;
-    background: white;
-    margin: 20px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.mode-btn {
-    flex: 1;
-    padding: 16px;
-    border: none;
-    background: none;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.mode-btn.active {
-    background: #667eea;
-    color: white;
+    border-bottom: 1px solid #ddd;
 }
 
 /* 章节栏 */
 .chapter-bar {
     display: flex;
     overflow-x: auto;
-    background: white;
-    border-radius: 12px;
-    margin: 0 20px 20px 20px;
-    padding: 0 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: #fff;
+    border-bottom: 1px solid #ddd;
 }
 
 .chapter-btn {
-    padding: 14px 18px;
+    padding: 12px 16px;
     font-size: 14px;
     white-space: nowrap;
     cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
 }
 
 .chapter-btn.active {
-    color: #667eea;
-    border-bottom: 3px solid #667eea;
+    color: #1976d2;
+    border-bottom: 2px solid #1976d2;
     font-weight: bold;
 }
 
 /* 题目卡片 */
 .card {
-    background: white;
-    margin: 0 20px 20px 20px;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
+    background: #fff;
+    margin: 16px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .question-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
 }
 
 .type {
     font-size: 14px;
-    padding: 6px 16px;
-    background: #e3f2fd;
-    color: #1976d2;
-    border-radius: 20px;
-    font-weight: 500;
+    color: #666;
+    padding: 4px 12px;
+    background: #f5f5f5;
+    border-radius: 15px;
 }
 
 .question-number {
     font-size: 14px;
-    color: #666;
+    color: #888;
 }
 
 .question {
-    font-size: 17px;
-    line-height: 1.8;
-    flex: 1;
-    margin-bottom: 25px;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    min-height: 60px;
 }
 
 .question .blank {
     display: inline-block;
-    min-width: 120px;
-    height: 36px;
-    border-bottom: 3px dashed #667eea;
-    margin: 0 8px;
+    min-width: 100px;
+    height: 32px;
+    border-bottom: 2px dashed #1976d2;
+    margin: 0 5px;
     vertical-align: middle;
     text-align: center;
-    line-height: 36px;
-    font-size: 16px;
-    color: #333;
+    line-height: 32px;
 }
 
 /* 填空题输入区域 */
-.fill-blank-section {
-    margin-top: auto;
-}
-
-.answer-input-container {
-    margin-bottom: 20px;
+.fill-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #1976d2;
 }
 
 .answer-input {
     width: 100%;
-    padding: 16px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 16px;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
     box-sizing: border-box;
-    transition: all 0.3s;
+    margin-bottom: 15px;
     font-family: "Microsoft YaHei", sans-serif;
 }
 
 .answer-input:focus {
-    border-color: #667eea;
+    border-color: #1976d2;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 /* 解答题答案区域 */
-.essay-answer-section {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 20px;
+.essay-section {
     margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.answer-content {
+    white-space: pre-line;
+    line-height: 1.6;
+    padding: 15px;
+    background: #f1f8e9;
+    border-radius: 6px;
+    margin-top: 10px;
     border-left: 4px solid #4caf50;
 }
 
-.essay-answer-section h4 {
-    margin: 0 0 15px 0;
-    color: #333;
-    font-size: 16px;
-}
-
-.correct-answer {
-    line-height: 1.7;
-    font-size: 15px;
-    color: #444;
-    white-space: pre-line;
-    padding: 15px;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-}
-
 /* 按钮样式 */
-.action-buttons {
+.button-group {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     margin-top: 20px;
 }
 
-.action-btn {
+.btn {
     flex: 1;
-    padding: 16px;
+    padding: 12px;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 6px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
 }
 
-.submit-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.btn-primary {
+    background: #1976d2;
     color: white;
 }
 
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+.btn-primary:hover {
+    background: #1565c0;
 }
 
-.show-answer-btn {
+.btn-secondary {
     background: #f5f5f5;
     color: #333;
-    border: 2px solid #e0e0e0;
+    border: 1px solid #ddd;
 }
 
-.show-answer-btn:hover {
-    background: #e8e8e8;
+.btn-secondary:hover {
+    background: #e9e9e9;
 }
 
-.next-btn {
-    background: #4caf50;
+.btn-success {
+    background: #2e7d32;
     color: white;
 }
 
-.next-btn:hover {
-    background: #43a047;
-    transform: translateY(-2px);
+.btn-success:hover {
+    background: #1b5e20;
 }
 
 /* 提示框 */
@@ -246,11 +194,23 @@ body {
     margin: 15px 0;
     color: #856404;
     display: none;
+    animation: fadeIn 0.3s ease;
 }
 
 .hint-box.show {
     display: block;
-    animation: fadeIn 0.3s ease;
+}
+
+.hint-box.correct {
+    background: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.hint-box.incorrect {
+    background: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
 }
 
 @keyframes fadeIn {
@@ -258,104 +218,55 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* 底部导航 */
-.bottom-nav {
+/* 底部按钮 */
+.footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     display: flex;
-    background: white;
-    padding: 15px;
-    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
-    z-index: 100;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    padding: 10px;
 }
 
-.nav-btn {
+.footer button {
     flex: 1;
     padding: 14px;
-    margin: 0 5px;
-    border: 2px solid #667eea;
-    background: white;
-    color: #667eea;
-    border-radius: 10px;
+    border: none;
+    background: none;
     font-size: 15px;
     font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
+    color: #333;
 }
 
-.nav-btn:hover {
-    background: #667eea;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.nav-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.footer button:hover {
     background: #f5f5f5;
-    color: #999;
-    border-color: #ddd;
+}
+
+.footer button:nth-child(2) {
+    background: #333;
+    color: #fff;
+    border-radius: 4px;
+    margin: 0 10px;
+}
+
+.footer button:nth-child(2):hover {
+    background: #555;
 }
 
 /* 统计信息 */
-.stats-bar {
-    display: flex;
-    justify-content: space-between;
-    background: white;
-    border-radius: 12px;
-    margin: 0 20px 20px 20px;
-    padding: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.stat-item {
+.stats {
     text-align: center;
-    flex: 1;
-}
-
-.stat-value {
-    font-size: 24px;
-    font-weight: bold;
-    color: #667eea;
-    display: block;
-}
-
-.stat-label {
-    font-size: 12px;
+    padding: 10px;
+    font-size: 14px;
     color: #666;
-    margin-top: 5px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .header {
-        padding: 15px;
-        font-size: 18px;
-    }
-    
-    .card {
-        padding: 20px;
-        margin: 0 15px 15px 15px;
-    }
-    
-    .question {
-        font-size: 16px;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .bottom-nav {
-        padding: 10px;
-    }
-    
-    .nav-btn {
-        padding: 12px;
-        margin: 0 3px;
-    }
+.stats span {
+    margin: 0 15px;
 }
 </style>
 </head>
@@ -364,32 +275,14 @@ body {
 
 <div class="header">传感器习题集刷题工具</div>
 
-<!-- 模式切换 -->
-<div class="mode-switcher">
-    <button class="mode-btn active" onclick="switchMode('fill')">填空题模式</button>
-    <button class="mode-btn" onclick="switchMode('essay')">解答题模式</button>
+<div class="stats">
+    当前章节：<span id="currentChapterText">第1章 概述</span> |
+    进度：<span id="progressText">1/10</span> |
+    正确率：<span id="accuracyText">0%</span>
 </div>
 
-<!-- 统计信息 -->
-<div class="stats-bar">
-    <div class="stat-item">
-        <span class="stat-value" id="totalQuestions">0</span>
-        <span class="stat-label">总题数</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-value" id="currentProgress">0</span>
-        <span class="stat-label">当前进度</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-value" id="accuracyRate">0%</span>
-        <span class="stat-label">正确率</span>
-    </div>
-</div>
-
-<!-- 章节导航 -->
 <div class="chapter-bar" id="chapters"></div>
 
-<!-- 题目卡片 -->
 <div class="card">
     <div class="question-header">
         <span class="type" id="questionType">填空题</span>
@@ -399,159 +292,238 @@ body {
     <div class="question" id="questionText"></div>
     
     <!-- 填空题部分 -->
-    <div class="fill-blank-section" id="fillSection">
-        <div class="answer-input-container">
-            <input type="text" class="answer-input" id="userAnswer" 
-                   placeholder="请输入答案（直接输入文字，空格分隔多个填空）" 
-                   onkeypress="handleEnterKey(event)">
-        </div>
+    <div class="fill-section" id="fillSection">
+        <input type="text" class="answer-input" id="userAnswer" 
+               placeholder="请输入答案（多个答案用逗号或顿号分隔）" 
+               onkeypress="handleEnterKey(event)">
         
-        <div class="hint-box" id="hintBox">
-            <strong>💡 正确答案：</strong><span id="correctAnswerText"></span>
-        </div>
+        <div class="hint-box" id="hintBox"></div>
         
-        <div class="action-buttons">
-            <button class="action-btn submit-btn" onclick="submitAnswer()">
-                <span>提交答案</span>
-            </button>
-            <button class="action-btn show-answer-btn" onclick="showCorrectAnswer()">
-                <span>查看答案</span>
-            </button>
-            <button class="action-btn next-btn" onclick="nextQuestion()" id="nextBtn">
-                <span>下一题</span>
-            </button>
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="submitAnswer()">提交答案</button>
+            <button class="btn btn-secondary" onclick="showAnswer()">查看答案</button>
         </div>
     </div>
     
     <!-- 解答题部分 -->
-    <div class="essay-answer-section" id="essaySection" style="display: none;">
-        <h4>参考答案：</h4>
-        <div class="correct-answer" id="essayAnswerText"></div>
-        <div class="action-buttons" style="margin-top: 20px;">
-            <button class="action-btn next-btn" onclick="nextQuestion()">
-                <span>下一题</span>
-            </button>
+    <div class="essay-section" id="essaySection" style="display: none;">
+        <div class="answer-content" id="answerContent"></div>
+        <div class="button-group">
+            <button class="btn btn-success" onclick="nextQuestion()">下一题</button>
         </div>
     </div>
 </div>
 
-<!-- 底部导航 -->
-<div class="bottom-nav">
-    <button class="nav-btn" onclick="prevChapter()" id="prevChapterBtn">上一章</button>
-    <button class="nav-btn" onclick="prevQuestion()" id="prevQuestionBtn">上一题</button>
-    <button class="nav-btn" onclick="nextQuestion()" id="nextQuestionBtn">下一题</button>
-    <button class="nav-btn" onclick="nextChapter()" id="nextChapterBtn">下一章</button>
+<div class="footer">
+    <button onclick="prevQuestion()">上一题</button>
+    <button onclick="toggleAnswerMode()" id="toggleBtn">切换查看答案</button>
+    <button onclick="nextQuestion()">下一题</button>
 </div>
 
 <script>
-// ===== 题库数据 =====
+// ===== 题库数据（包含填空题和解答题） =====
 const questionBank = {
-    "第1章 概述": {
-        fill: [
-            { q: "传感器是能够感受______并按照一定规律转换成可用输出信号的器件和装置。", a: "规定的被测量" },
-            { q: "传感器由______、______和______三部分组成。", a: "敏感元件、转换元件、基本电路" },
-            { q: "传感器主要发展趋势包括：______、网络化、数字化、______、微型化、智能化等。", a: "集成化、多功能化" }
-        ],
-        essay: [
-            { q: "简述传感器主要发展趋势。", a: "现代传感器正朝着集成化、网络化、数字化、多功能化、微型化、智能化光机电一体化方向发展，具有高精度、高性能、高灵敏度、高可靠性、高稳定性、长寿命、高信噪比、宽量程、无维护的特点。" },
-            { q: "空调和电冰箱中采用了哪些传感器？它们分别起到什么作用？", a: "空调传感器：温度传感器检测室内/室外环境温度、蒸发器温度等，控制压缩机启停和风机速度；红外传感器接收遥控信号。电冰箱传感器：温度传感器监测冷藏/冷冻室温度，控制压缩机启停和除霜。" }
-        ]
-    },
-    "第2章 传感器的基本特性": {
-        fill: [
-            { q: "传感器的静态特性是指当输入量为______时的输入输出特性。", a: "常数或变化极慢" },
-            { q: "静态特性的主要指标包括：线性度、______、重复性、______、稳定性等。", a: "迟滞、分辨力" },
-            { q: "线性度是将近似后的______与实际曲线进行比较的最大偏差。", a: "拟合直线" }
-        ],
-        essay: [
-            { q: "传感器的静态特性是什么？由哪些性能指标描述？", a: "静特性是当输入量为常数或变化极慢时，传感器的输入输出特性。其主要指标有线性度、迟滞、重复性、分辨力、稳定性、温度稳定性、各种抗干扰稳定性。" },
-            { q: "传感器的标定与校准有什么不同？", a: "标定是通过实验或计算确定传感器的测量量和真实值之间的关系，建立输出量与输入量的对应关系。适用于较高精度的仪器，通常在使用前进行。校准在使用前或使用过程中，通过已知的标准量对传感器进行调整，使其输出更加准确。" }
-        ]
-    },
-    "第3章 电阻应变式传感器": {
-        fill: [
-            { q: "导体因变形而使其电阻值发生变化的现象称为______。", a: "电阻应变效应" },
-            { q: "金属应变片利用______效应，半导体应变片利用______效应。", a: "应变、压阻" },
-            { q: "半导体应变片的灵敏系数范围约为______。", a: "50～100" }
-        ],
-        essay: [
-            { q: "何为电阻应变效应？怎样利用这种效应制成应变片？", a: "导体在受到拉力或压力的外界力作用时，会产生机械变形，同时机械变形会引起导体阻值的变化，这种导体材料因变形而使其电阻值发生变化的现象称为电阻应变效应。当外力作用时，导体的电阻率、长度、截面积都会发生变化，从而引起电阻值的变化，通过测量电阻值的变化，检测出外界作用力的大小。" },
-            { q: "金属应变片与半导体应变片在工作原理上有何不同？", a: "金属导体应变片的电阻变化是利用机械形变产生的应变效应，对于半导体而言，应变传感器主要是利用半导体材料的压阻效应。金属电阻丝的灵敏系数约为2；半导体灵敏系数约为50～100。" }
-        ]
-    },
-    "第4章 电容式传感器": {
-        fill: [
-            { q: "为改善单极式变极距型电容传感器的非线性，通常采用______结构。", a: "差动" },
-            { q: "高频工作时电容式传感器连接电缆长度不能任意变化，是因为______不可忽略。", a: "电缆等效电感和电阻" }
-        ],
-        essay: [
-            { q: "如何改善单极式变极距型电容传感器的非线性？", a: "非线性随相对位移的增加而增加，为保证线性度应限制相对位移的大小；起始极距与灵敏度、线性度相矛盾，所以变极距式电容传感器只适合小位移测量；为提高传感器的灵敏度和改善非线性关系，变极距式电容传感器一般采用差动结构。" },
-            { q: "为什么高频工作时的电容式传感器连接电缆的长度不能任意变化？", a: "低频时容抗较大，传输线的等效电感和电阻可忽略。而高频时容抗减小，等效电感和电阻不可忽略，这时接在传感器输出端相当于一个串联谐振，当工作频率接近谐振频率时，谐振对传感器的输出起破坏作用，使电路不能正常工作。通常工作频率10MHz以上就要考虑电缆线等效电感的影响。" }
-        ]
-    },
-    "第5章 电感式传感器": {
-        fill: [
-            { q: "电感式传感器利用线圈______和______的变化实现非电量电测。", a: "自感、互感" },
-            { q: "提高电感式传感器线性度的有效方法是采用______形式和______电路。", a: "差动、相敏检波" },
-            { q: "金属导体在变化磁场中产生的闭合电流称为______。", a: "电涡流" }
-        ],
-        essay: [
-            { q: "何谓电感式传感器？电感式传感器分为哪几类？", a: "电感式传感器是一种机-电转换装置，是利用线圈自感和互感的变化实现非电量电测的一种装置，传感器利用电磁感应定律将被测非电量转换为电感或互感的变化。种类：自感式、涡流式、差动式、变压式等。" },
-            { q: "什么叫电涡流效应？说明电涡流式传感器的基本结构与工作原理。", a: "块状金属导体置于变化的磁场中或在磁场中作用切割磁力线运动时，导体内部会产生一圈圈闭和的电流，这种电流叫电涡流，这种现象叫做电涡流效应。形成涡流必须具备两个条件：第一存在交变磁场；第二导电体处于交变磁场中。电涡流式传感器通电后线圈周围产生交变磁场，金属导体置于线圈附近时会产生涡流，这个涡流同样产生交变磁场。由于磁场的反作用使线圈的等效电感和等效阻抗发生变化，通过检测与阻抗有关的参数进行非电量检测。" }
-        ]
-    },
-    "第6章 磁电式传感器": {
-        fill: [
-            { q: "磁电感应式传感器的工作原理基于______定律。", a: "电磁感应" },
-            { q: "霍尔效应是指通电导体在磁场中，在______方向产生感应电动势的现象。", a: "与电流和磁场都垂直" }
-        ],
-        essay: [
-            { q: "试述磁电感应式传感器的工作原理和结构形式。", a: "磁电感应式传感器的工作原理基于电磁感应定律，当导体在磁场中运动切割磁力线或线圈中的磁通发生变化时，导体或线圈中会产生感应电动势。其结构形式主要有动圈式和动铁式。" },
-            { q: "什么是霍尔效应？", a: "通电的导体（半导体）放在磁场中，电流与磁场垂直，在导体另外两侧会产生感应电动势，这种现象称霍尔效应。" }
-        ]
-    },
-    "第7章 压电式传感器": {
-        fill: [
-            { q: "电介质在受力变形时产生电荷的现象称为______。", a: "压电效应" },
-            { q: "压电器件需要高阻抗输出，主要是为了匹配______负载。", a: "高阻抗" }
-        ],
-        essay: [
-            { q: "什么是压电效应？什么是正压电效应和逆压电效应？", a: "某些电介质在沿一定的方向受到外力的作用变形时，由于内部电极化现象同时在两个表面上产生符号相反的电荷，当外力去掉后，恢复到不带电的状态；而当作用力方向改变时，电荷的极性随着改变。正压电效应也称压电效应。对晶体施加一定变电场，晶体本身将产生机械变形，外电场撤离，变形也随之消失，称为逆压电效应。" },
-            { q: "为什么压电器件一定要高阻抗输出？", a: "压电器件需要高阻抗输出，主要是为了匹配高阻抗负载，从而提高信号传输效率。压电器件输出的是微弱的电荷信号，如果负载阻抗较低，电荷会迅速泄漏，导致信号失真或测量不准确。高阻抗输出可以有效减少这种电荷泄漏，保证信号的完整性。" }
-        ]
-    },
-    "第8章 光电效应及器件": {
-        fill: [
-            { q: "内光电效应包括______效应和______效应。", a: "光电导、光生伏特" },
-            { q: "光敏电阻的暗电阻通常为______量级。", a: "0.5～200MΩ" }
-        ],
-        essay: [
-            { q: "什么是内光电效应？什么是外光电效应？说明其工作原理并指出相应的典型光电器件。", a: "当光线照在物体上，使物体的电导率发生变化，或产生光生电动势的现象叫做内光电效应，内光电效应又分为光电导效应和光生伏特效应。入射光强改变物质导电率的物理现象称光电导效应，典型的光电器件有光敏电阻；光照时物体中能产生一定方向电动势的现象叫光生伏特效应，光电池、光敏晶体管。在光线作用下，物体内的电子逸出物体表面向外发射的现象称为外光电效应，典型的光电器件有光电管、光电倍增管。" },
-            { q: "什么是光敏电阻的亮电阻和暗电阻？暗电阻电阻值通常在什么范围？", a: "暗电阻，无光照时的电阻为暗电阻，暗电阻电阻值范围一般为0.5～200MΩ；亮电阻、受光照时的电阻称亮电阻，亮电阻的阻值一般为0.5～20KΩ。" }
-        ]
-    },
-    "第9章 新型光电传感器": {
-        fill: [
-            { q: "CCD主要由______和______组成。", a: "MOS光敏元阵列、读出移位寄存器" },
-            { q: "光纤传感器分为______型和______型两大类。", a: "传光、功能" }
-        ],
-        essay: [
-            { q: "CCD主要由哪两部分组成？", a: "MOS光敏元阵列、读出移位寄存器。" },
-            { q: "光纤传感器有哪两大类型？", a: "传光型，功能型。" }
-        ]
-    }
+    "第1章 概述": [
+        {
+            type: "fill",
+            q: "传感器是能够感受______并按照一定规律转换成可用输出信号的器件和装置。",
+            a: "规定的被测量"
+        },
+        {
+            type: "fill", 
+            q: "传感器由______、______和______三部分组成。",
+            a: "敏感元件、转换元件、基本电路"
+        },
+        {
+            type: "fill",
+            q: "传感器主要发展趋势包括：______、网络化、数字化、______、微型化、智能化等。",
+            a: "集成化、多功能化"
+        },
+        {
+            type: "essay",
+            q: "简述传感器主要发展趋势。",
+            a: "现代传感器正朝着集成化、网络化、数字化、多功能化、微型化、智能化光机电一体化方向发展，具有高精度、高性能、高灵敏度、高可靠性、高稳定性、长寿命、高信噪比、宽量程、无维护的特点。发展趋势总体表现为发展、利用新效应，开发新材料，提高传感器的性能和检测范围。"
+        },
+        {
+            type: "essay",
+            q: "空调和电冰箱中采用了哪些传感器？它们分别起到什么作用？",
+            a: "空调传感器：温度传感器检测室内/室外环境温度、蒸发器温度等，控制压缩机启停和风机速度；红外传感器接收遥控信号。\n\n电冰箱传感器：温度传感器监测冷藏/冷冻室温度，控制压缩机启停和除霜。"
+        }
+    ],
+    "第2章 传感器的基本特性": [
+        {
+            type: "fill",
+            q: "传感器的静态特性是指当输入量为______时的输入输出特性。",
+            a: "常数或变化极慢"
+        },
+        {
+            type: "fill",
+            q: "静态特性的主要指标包括：线性度、______、重复性、______、稳定性等。",
+            a: "迟滞、分辨力"
+        },
+        {
+            type: "fill",
+            q: "线性度是将近似后的______与实际曲线进行比较的最大偏差。",
+            a: "拟合直线"
+        },
+        {
+            type: "essay",
+            q: "传感器的静态特性是什么？由哪些性能指标描述？",
+            a: "静特性是当输入量为常数或变化极慢时，传感器的输入输出特性。其主要指标有线性度、迟滞、重复性、分辨力、稳定性、温度稳定性、各种抗干扰稳定性。"
+        },
+        {
+            type: "essay", 
+            q: "传感器的标定与校准有什么不同？",
+            a: "标定是通过实验或计算确定传感器的测量量和真实值之间的关系，建立输出量与输入量的对应关系。适用于较高精度的仪器，通常在使用前进行。\n\n校准在使用前或使用过程中，通过已知的标准量对传感器进行调整，使其输出更加准确。属于强制性检定之外的测量装置，如非强制性检定的计量器具。"
+        }
+    ],
+    "第3章 电阻应变式传感器": [
+        {
+            type: "fill",
+            q: "导体因变形而使其电阻值发生变化的现象称为______。",
+            a: "电阻应变效应"
+        },
+        {
+            type: "fill",
+            q: "金属应变片利用______效应，半导体应变片利用______效应。",
+            a: "应变、压阻"
+        },
+        {
+            type: "essay",
+            q: "何为电阻应变效应？怎样利用这种效应制成应变片？",
+            a: "导体在受到拉力或压力的外界力作用时，会产生机械变形，同时机械变形会引起导体阻值的变化，这种导体材料因变形而使其电阻值发生变化的现象称为电阻应变效应。\n\n当外力作用时，导体的电阻率、长度、截面积都会发生变化，从而引起电阻值的变化，通过测量电阻值的变化，检测出外界作用力的大小。"
+        },
+        {
+            type: "essay",
+            q: "金属应变片与半导体应变片在工作原理上有何不同？",
+            a: "金属导体应变片的电阻变化是利用机械形变产生的应变效应，对于半导体而言，应变传感器主要是利用半导体材料的压阻效应。\n\n金属电阻丝的灵敏系数可近似写为 K≈1+2μ，即约2；半导体灵敏系数近似为 K≈πE，约50～100。"
+        }
+    ],
+    "第4章 电容式传感器": [
+        {
+            type: "fill",
+            q: "为改善单极式变极距型电容传感器的非线性，通常采用______结构。",
+            a: "差动"
+        },
+        {
+            type: "essay",
+            q: "如何改善单极式变极距型电容传感器的非线性？",
+            a: "非线性随相对位移的增加而增加，为保证线性度应限制相对位移的大小，即限制量程大小；起始极距与灵敏度、线性度相矛盾，所以变极距式电容传感器只适合小位移测量，限制初始极距的大小；为提高传感器的灵敏度和改善非线性关系，变极距式电容传感器一般采用差动结构。"
+        },
+        {
+            type: "essay",
+            q: "为什么高频工作时的电容式传感器连接电缆的长度不能任意变化？",
+            a: "低频时容抗较大，传输线的等效电感和电阻可忽略。而高频时容抗减小，等效电感和电阻不可忽略，这时接在传感器输出端相当于一个串联谐振，有一个谐振频率存在，当工作频率接近谐振频率时，串联谐振阻抗最小，电流最大，谐振对传感器的输出起破坏作用，使电路不能正常工作。通常工作频率10MHz以上就要考虑电缆线等效电感的影响。"
+        }
+    ],
+    "第5章 电感式传感器": [
+        {
+            type: "fill",
+            q: "电感式传感器利用线圈______和______的变化实现非电量电测。",
+            a: "自感、互感"
+        },
+        {
+            type: "fill",
+            q: "提高电感式传感器线性度的有效方法是采用______形式和______电路。",
+            a: "差动、相敏检波"
+        },
+        {
+            type: "fill",
+            q: "金属导体在变化磁场中产生的闭合电流称为______。",
+            a: "电涡流"
+        },
+        {
+            type: "essay",
+            q: "何谓电感式传感器？电感式传感器分为哪几类？",
+            a: "电感式传感器是一种机-电转换装置，电感式传感器是利用线圈自感和互感的变化实现非电量电测的一种装置，传感器利用电磁感应定律将被测非电量转换为电感或互感的变化。\n\n电感式传感器种类：自感式、涡流式、差动式、变压式等。"
+        }
+    ],
+    "第6章 磁电式传感器": [
+        {
+            type: "fill",
+            q: "磁电感应式传感器的工作原理基于______定律。",
+            a: "电磁感应"
+        },
+        {
+            type: "fill", 
+            q: "霍尔效应是指通电导体在磁场中，在______方向产生感应电动势的现象。",
+            a: "与电流和磁场都垂直"
+        },
+        {
+            type: "essay",
+            q: "试述磁电感应式传感器的工作原理和结构形式。",
+            a: "磁电感应式传感器的工作原理基于电磁感应定律，当导体在磁场中运动切割磁力线或线圈中的磁通发生变化时，导体或线圈中会产生感应电动势。其结构形式主要有动圈式和动铁式。"
+        }
+    ],
+    "第7章 压电式传感器": [
+        {
+            type: "fill",
+            q: "电介质在受力变形时产生电荷的现象称为______。",
+            a: "压电效应"
+        },
+        {
+            type: "essay",
+            q: "什么是压电效应？什么是正压电效应和逆压电效应？",
+            a: "某些电介质在沿一定的方向受到外力的作用变形时，由于内部电极化现象同时在两个表面上产生符号相反的电荷，当外力去掉后，恢复到不带电的状态；而当作用力方向改变时，电荷的极性随着改变。正压电效应也称压电效应。对晶体施加一定变电场，晶体本身将产生机械变形，外电场撤离，变形也随之消失，称为逆压电效应。"
+        }
+    ],
+    "第8章 光电效应及器件": [
+        {
+            type: "fill",
+            q: "内光电效应包括______效应和______效应。",
+            a: "光电导、光生伏特"
+        },
+        {
+            type: "fill",
+            q: "光敏电阻的暗电阻通常为______量级。",
+            a: "0.5～200MΩ"
+        },
+        {
+            type: "essay",
+            q: "什么是内光电效应？什么是外光电效应？说明其工作原理并指出相应的典型光电器件。",
+            a: "内光电效应：当光线照在物体上，使物体的电导率发生变化，或产生光生电动势的现象叫做内光电效应，内光电效应又分为光电导效应和光生伏特效应。入射光强改变物质导电率的物理现象称光电导效应，典型的光电器件有光敏电阻；光照时物体中能产生一定方向电动势的现象叫光生伏特效应，光电池、光敏晶体管。\n\n外光电效应：在光线作用下，物体内的电子逸出物体表面向外发射的现象称为外光电效应，典型的光电器件有光电管、光电倍增管。"
+        }
+    ],
+    "第9章 新型光电传感器": [
+        {
+            type: "fill",
+            q: "CCD主要由______和______组成。",
+            a: "MOS光敏元阵列、读出移位寄存器"
+        },
+        {
+            type: "fill",
+            q: "光纤传感器分为______型和______型两大类。",
+            a: "传光、功能"
+        }
+    ],
+    "第10章 半导体式化学传感器": [
+        {
+            type: "fill",
+            q: "半导体气体传感器是利用半导体材料与气体接触时______变化的原理。",
+            a: "电阻或功函数"
+        }
+    ],
+    "第12章 热电式传感器": [
+        {
+            type: "fill",
+            q: "热电偶测温回路的热电势主要由______电势和______电势组成。",
+            a: "接触、温差"
+        },
+        {
+            type: "essay", 
+            q: "什么是热电效应？热电偶测温回路的热电动势由哪两部分组成？",
+            a: "热电效应：两种不同类型的金属导体两端分别接在一起构成闭合回路，当两个结点有温差时，导体回路里有电流流动会产生热电势，这种现象称为热电效应。\n\n热电偶测温回路中热电势主要是由接触电势和温差电势两部分组成。"
+        }
+    ]
 };
 
 // ===== 全局变量 =====
 let currentChapter = "第1章 概述";
-let currentMode = "fill"; // 'fill' 或 'essay'
 let currentQuestionIndex = 0;
-let answeredCorrectly = false;
-let userStats = {
+let showAnswerMode = false; // 是否显示答案模式
+let stats = {
     totalAttempts: 0,
-    correctAnswers: 0,
-    currentChapterIndex: 0,
-    chapterProgress: {}
+    correctAnswers: 0
 };
 
 // ===== 初始化章节导航 =====
@@ -573,7 +545,8 @@ function initializeChapters() {
 function switchChapter(chapter) {
     currentChapter = chapter;
     currentQuestionIndex = 0;
-    answeredCorrectly = false;
+    showAnswerMode = false;
+    document.getElementById("currentChapterText").textContent = chapter;
     
     // 更新章节按钮状态
     document.querySelectorAll(".chapter-btn").forEach(btn => {
@@ -585,44 +558,16 @@ function switchChapter(chapter) {
     
     // 加载题目
     loadQuestion();
-    updateStats();
-    updateNavButtons();
-}
-
-// ===== 切换模式 =====
-function switchMode(mode) {
-    currentMode = mode;
-    currentQuestionIndex = 0;
-    answeredCorrectly = false;
-    
-    // 更新模式按钮状态
-    document.querySelectorAll(".mode-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
-    document.querySelectorAll(".mode-btn")[mode === 'fill' ? 0 : 1].classList.add("active");
-    
-    // 显示/隐藏对应的部分
-    if (mode === 'fill') {
-        document.getElementById("fillSection").style.display = 'block';
-        document.getElementById("essaySection").style.display = 'none';
-        document.getElementById("questionType").textContent = "填空题";
-        document.getElementById("userAnswer").value = "";
-    } else {
-        document.getElementById("fillSection").style.display = 'none';
-        document.getElementById("essaySection").style.display = 'block';
-        document.getElementById("questionType").textContent = "解答题";
-    }
-    
-    loadQuestion();
-    updateStats();
+    updateProgress();
 }
 
 // ===== 加载题目 =====
 function loadQuestion() {
-    const chapterQuestions = questionBank[currentChapter][currentMode];
-    
+    const chapterQuestions = questionBank[currentChapter];
     if (!chapterQuestions || chapterQuestions.length === 0) {
         document.getElementById("questionText").textContent = "本章暂无题目";
+        document.getElementById("fillSection").style.display = "none";
+        document.getElementById("essaySection").style.display = "none";
         return;
     }
     
@@ -630,107 +575,122 @@ function loadQuestion() {
     
     // 更新题目
     document.getElementById("questionText").textContent = question.q;
-    document.getElementById("questionNumber").textContent = `第${currentQuestionIndex + 1}题/共${chapterQuestions.length}题`;
+    document.getElementById("questionNumber").textContent = `第${currentQuestionIndex + 1}题`;
     
-    // 更新答案区域
-    document.getElementById("correctAnswerText").textContent = question.a;
-    document.getElementById("essayAnswerText").textContent = question.a;
-    
-    // 重置状态
-    document.getElementById("hintBox").classList.remove("show");
-    document.getElementById("userAnswer").value = "";
-    answeredCorrectly = false;
-    
-    // 如果是填空题模式，聚焦输入框
-    if (currentMode === 'fill') {
+    // 根据题型显示不同内容
+    if (question.type === "fill") {
+        document.getElementById("questionType").textContent = "填空题";
+        document.getElementById("fillSection").style.display = "block";
+        document.getElementById("essaySection").style.display = "none";
+        document.getElementById("userAnswer").value = "";
+        document.getElementById("hintBox").className = "hint-box";
+        document.getElementById("hintBox").style.display = "none";
+        document.getElementById("toggleBtn").textContent = "查看答案";
+        
+        // 聚焦输入框
         setTimeout(() => {
             document.getElementById("userAnswer").focus();
         }, 100);
+    } else {
+        document.getElementById("questionType").textContent = "解答题";
+        document.getElementById("fillSection").style.display = "none";
+        document.getElementById("essaySection").style.display = "block";
+        document.getElementById("answerContent").textContent = showAnswerMode ? question.a : "点击下方按钮查看答案";
+        document.getElementById("toggleBtn").textContent = showAnswerMode ? "隐藏答案" : "查看答案";
     }
+    
+    updateProgress();
 }
 
-// ===== 提交答案（填空题模式） =====
+// ===== 提交答案（填空题） =====
 function submitAnswer() {
     const userAnswer = document.getElementById("userAnswer").value.trim();
-    const correctAnswer = questionBank[currentChapter][currentMode][currentQuestionIndex].a;
+    const correctAnswer = questionBank[currentChapter][currentQuestionIndex].a;
     
-    userStats.totalAttempts++;
+    if (!userAnswer) {
+        alert("请输入答案");
+        return;
+    }
     
-    // 简单的答案对比（实际应用中可能需要更智能的匹配）
+    stats.totalAttempts++;
+    
+    // 答案对比
     const isCorrect = compareAnswers(userAnswer, correctAnswer);
     
+    const hintBox = document.getElementById("hintBox");
     if (isCorrect) {
-        userStats.correctAnswers++;
-        answeredCorrectly = true;
+        stats.correctAnswers++;
+        hintBox.innerHTML = "<strong>✓ 回答正确！</strong>";
+        hintBox.className = "hint-box correct";
         
-        // 显示成功提示
-        document.getElementById("hintBox").innerHTML = `
-            <div style="color: #4caf50; font-weight: bold;">
-                ✓ 回答正确！
-            </div>
-        `;
-        document.getElementById("hintBox").classList.add("show");
-        
-        // 自动跳转到下一题（延迟1秒）
+        // 2秒后自动下一题
         setTimeout(() => {
             nextQuestion();
-        }, 1000);
+        }, 2000);
     } else {
-        // 显示正确答案
-        document.getElementById("hintBox").innerHTML = `
-            <div style="color: #f44336; font-weight: bold; margin-bottom: 8px;">
-                ✗ 答案不正确
-            </div>
-            <div><strong>💡 正确答案：</strong>${correctAnswer}</div>
-        `;
-        document.getElementById("hintBox").classList.add("show");
+        hintBox.innerHTML = `<div style="margin-bottom: 8px;"><strong>✗ 答案不正确</strong></div>
+                           <div><strong>正确答案：</strong> ${correctAnswer}</div>`;
+        hintBox.className = "hint-box incorrect";
     }
     
-    updateStats();
+    hintBox.style.display = "block";
+    updateProgress();
 }
 
-// ===== 答案比较函数 =====
+// ===== 答案对比函数 =====
 function compareAnswers(userAnswer, correctAnswer) {
-    // 简单比较：去除空格，转换为小写进行比较
-    const user = userAnswer.replace(/\s+/g, '').toLowerCase();
-    const correct = correctAnswer.replace(/\s+/g, '').toLowerCase();
+    // 去除多余空格，统一分隔符
+    const user = userAnswer.replace(/\s+/g, '').replace(/，/g, ',').toLowerCase();
+    const correct = correctAnswer.replace(/\s+/g, '').replace(/，/g, ',').toLowerCase();
     
-    // 如果完全匹配
+    // 直接比较
     if (user === correct) return true;
     
-    // 如果用户答案包含在正确答案中，或者正确答案包含在用户答案中
-    if (user.includes(correct) || correct.includes(user)) return true;
-    
-    // 对于多个填空的答案，允许以任何顺序输入
-    if (correct.includes('、') || correct.includes(',')) {
-        const correctParts = correct.split(/[、,]/).filter(p => p.trim()).map(p => p.trim());
-        const userParts = user.split(/[、,]/).filter(p => p.trim()).map(p => p.trim());
+    // 处理多个答案的情况
+    if (correct.includes(',')) {
+        const correctParts = correct.split(',').filter(p => p);
+        const userParts = user.split(',').filter(p => p);
         
-        // 检查是否所有正确答案部分都出现在用户答案中
-        const allPartsMatched = correctParts.every(part => user.includes(part));
-        if (allPartsMatched && correctParts.length === userParts.length) return true;
+        // 检查长度是否相同
+        if (correctParts.length !== userParts.length) return false;
+        
+        // 检查每个部分是否匹配
+        for (let i = 0; i < correctParts.length; i++) {
+            if (!user.includes(correctParts[i])) return false;
+        }
+        return true;
     }
     
-    return false;
+    // 部分匹配
+    return user.includes(correct) || correct.includes(user);
 }
 
-// ===== 显示答案（填空题模式） =====
-function showCorrectAnswer() {
-    const correctAnswer = questionBank[currentChapter][currentMode][currentQuestionIndex].a;
+// ===== 查看答案（填空题） =====
+function showAnswer() {
+    const correctAnswer = questionBank[currentChapter][currentQuestionIndex].a;
+    const hintBox = document.getElementById("hintBox");
+    hintBox.innerHTML = `<div><strong>正确答案：</strong> ${correctAnswer}</div>`;
+    hintBox.className = "hint-box";
+    hintBox.style.display = "block";
+}
+
+// ===== 切换答案模式（解答题） =====
+function toggleAnswerMode() {
+    const question = questionBank[currentChapter][currentQuestionIndex];
     
-    document.getElementById("hintBox").innerHTML = `
-        <div style="font-weight: bold; margin-bottom: 8px; color: #2196f3;">
-            💡 正确答案：
-        </div>
-        <div>${correctAnswer}</div>
-    `;
-    document.getElementById("hintBox").classList.add("show");
+    if (question.type === "fill") {
+        // 填空题模式：直接查看答案
+        showAnswer();
+    } else {
+        // 解答题模式：切换显示/隐藏答案
+        showAnswerMode = !showAnswerMode;
+        loadQuestion();
+    }
 }
 
 // ===== 题目导航 =====
 function prevQuestion() {
-    const chapterQuestions = questionBank[currentChapter][currentMode];
-    if (chapterQuestions.length === 0) return;
+    const chapterQuestions = questionBank[currentChapter];
     
     if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
@@ -740,20 +700,17 @@ function prevQuestion() {
         const currentIndex = chapters.indexOf(currentChapter);
         if (currentIndex > 0) {
             switchChapter(chapters[currentIndex - 1]);
-            const prevChapterQuestions = questionBank[chapters[currentIndex - 1]][currentMode];
+            const prevChapterQuestions = questionBank[chapters[currentIndex - 1]];
             currentQuestionIndex = prevChapterQuestions.length - 1;
-        } else {
-            currentQuestionIndex = 0;
         }
     }
     
+    showAnswerMode = false;
     loadQuestion();
-    updateNavButtons();
 }
 
 function nextQuestion() {
-    const chapterQuestions = questionBank[currentChapter][currentMode];
-    if (chapterQuestions.length === 0) return;
+    const chapterQuestions = questionBank[currentChapter];
     
     if (currentQuestionIndex < chapterQuestions.length - 1) {
         currentQuestionIndex++;
@@ -765,80 +722,45 @@ function nextQuestion() {
             switchChapter(chapters[currentIndex + 1]);
             currentQuestionIndex = 0;
         } else {
+            // 如果是最后一章的最后一题，循环回到第一章
+            switchChapter(chapters[0]);
             currentQuestionIndex = 0;
-            alert("已经是最后一章的最后一题，将从头开始");
         }
     }
     
+    showAnswerMode = false;
     loadQuestion();
-    updateNavButtons();
 }
 
-// ===== 章节导航 =====
-function prevChapter() {
+// ===== 更新进度 =====
+function updateProgress() {
+    const chapterQuestions = questionBank[currentChapter];
     const chapters = Object.keys(questionBank);
-    const currentIndex = chapters.indexOf(currentChapter);
-    if (currentIndex > 0) {
-        switchChapter(chapters[currentIndex - 1]);
-    }
-}
-
-function nextChapter() {
-    const chapters = Object.keys(questionBank);
-    const currentIndex = chapters.indexOf(currentChapter);
-    if (currentIndex < chapters.length - 1) {
-        switchChapter(chapters[currentIndex + 1]);
-    }
-}
-
-// ===== 更新导航按钮状态 =====
-function updateNavButtons() {
-    const chapters = Object.keys(questionBank);
-    const currentIndex = chapters.indexOf(currentChapter);
-    const chapterQuestions = questionBank[currentChapter][currentMode];
-    
-    // 更新上一章/下一章按钮
-    document.getElementById("prevChapterBtn").disabled = currentIndex === 0;
-    document.getElementById("nextChapterBtn").disabled = currentIndex === chapters.length - 1;
-    
-    // 更新上一题/下一题按钮
-    document.getElementById("prevQuestionBtn").disabled = currentQuestionIndex === 0 && currentIndex === 0;
-    document.getElementById("nextQuestionBtn").disabled = 
-        currentQuestionIndex === chapterQuestions.length - 1 && 
-        currentIndex === chapters.length - 1;
-}
-
-// ===== 更新统计信息 =====
-function updateStats() {
-    const chapters = Object.keys(questionBank);
-    let totalQuestions = 0;
     
     // 计算总题数
+    let totalQuestions = 0;
     chapters.forEach(chapter => {
-        totalQuestions += questionBank[chapter].fill.length;
-        totalQuestions += questionBank[chapter].essay.length;
+        totalQuestions += questionBank[chapter].length;
     });
     
     // 计算当前进度
     const currentChapterIndex = chapters.indexOf(currentChapter);
-    let completedChapters = currentChapterIndex;
-    const currentChapterQuestions = questionBank[currentChapter][currentMode];
-    const progressInCurrentChapter = currentChapterQuestions.length > 0 ? 
-        ((currentQuestionIndex + 1) / currentChapterQuestions.length) * 100 : 0;
-    
-    const overallProgress = Math.round(((completedChapters + (progressInCurrentChapter / 100)) / chapters.length) * 100);
+    let progressCount = 0;
+    for (let i = 0; i < currentChapterIndex; i++) {
+        progressCount += questionBank[chapters[i]].length;
+    }
+    progressCount += currentQuestionIndex + 1;
     
     // 计算正确率
-    const accuracy = userStats.totalAttempts > 0 ? 
-        Math.round((userStats.correctAnswers / userStats.totalAttempts) * 100) : 0;
+    const accuracy = stats.totalAttempts > 0 ? 
+        Math.round((stats.correctAnswers / stats.totalAttempts) * 100) : 0;
     
     // 更新显示
-    document.getElementById("totalQuestions").textContent = totalQuestions;
-    document.getElementById("currentProgress").textContent = `${overallProgress}%`;
-    document.getElementById("accuracyRate").textContent = `${accuracy}%`;
+    document.getElementById("progressText").textContent = `${progressCount}/${totalQuestions}`;
+    document.getElementById("accuracyText").textContent = `${accuracy}%`;
 }
 
-// ===== 回车键提交答案 =====
+// ===== 回车键提交 =====
 function handleEnterKey(event) {
     if (event.key === 'Enter') {
         submitAnswer();
@@ -849,29 +771,27 @@ function handleEnterKey(event) {
 function initialize() {
     initializeChapters();
     loadQuestion();
-    updateStats();
-    updateNavButtons();
+    updateProgress();
 }
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', initialize);
 
-// 键盘快捷键支持
+// 键盘快捷键
 document.addEventListener('keydown', function(e) {
     switch(e.key) {
         case 'ArrowLeft':
-            if (e.ctrlKey) prevChapter();
-            else prevQuestion();
+            prevQuestion();
             break;
         case 'ArrowRight':
-            if (e.ctrlKey) nextChapter();
-            else nextQuestion();
+            nextQuestion();
             break;
-        case '1':
-            switchMode('fill');
-            break;
-        case '2':
-            switchMode('essay');
+        case ' ':
+            if (questionBank[currentChapter][currentQuestionIndex].type === "fill") {
+                showAnswer();
+            } else {
+                toggleAnswerMode();
+            }
             break;
     }
 });
