@@ -145,131 +145,32 @@ body {
     color: #333;
 }
 
-.question .blank {
-    display: inline-block;
-    min-width: 120px;
-    height: 36px;
-    border-bottom: 2px dashed #1976d2;
-    margin: 0 8px;
-    vertical-align: middle;
-    text-align: center;
-    line-height: 36px;
-    color: #333;
-    font-weight: bold;
-}
-
-/* 填空题输入区域 */
-.fill-section {
-    margin-top: 20px;
-}
-
-.answer-input-container {
-    margin-bottom: 20px;
-}
-
-.answer-input {
-    width: 100%;
-    padding: 14px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-family: "Microsoft YaHei", sans-serif;
-    background: #fafafa;
-}
-
-.answer-input:focus {
-    border-color: #1976d2;
-    outline: none;
-    background: #fff;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 14px;
-    background: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-bottom: 15px;
-}
-
-.submit-btn:hover {
-    background: #1565c0;
-}
-
-/* 填空题答案显示区域 */
-.fill-answer-box {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 15px;
-    background: #f8f9fa;
-    display: none;
-}
-
-.fill-answer-content {
-    white-space: pre-line;
-    line-height: 1.6;
-    font-size: 15px;
-    color: #333;
-}
-
 /* 解答题答案区域 */
-.essay-section {
+.answer-section {
     margin-top: 20px;
 }
 
-.essay-answer-box {
+.answer-box {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 20px;
     margin-top: 15px;
     background: #f8f9fa;
+    transition: all 0.3s;
 }
 
-.essay-answer-content {
+.answer-content {
     white-space: pre-line;
     line-height: 1.6;
     font-size: 15px;
     color: #333;
 }
 
-/* 提示框 */
-.hint-box {
-    background: #fff3cd;
-    border: 1px solid #ffeaa7;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 20px 0;
-    color: #856404;
-    display: none;
-    animation: fadeIn 0.3s ease;
-}
-
-.hint-box.show {
-    display: block;
-}
-
-.hint-box.correct {
-    background: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
-}
-
-.hint-box.incorrect {
-    background: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+.answer-placeholder {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
 }
 
 /* 图片显示 */
@@ -287,7 +188,7 @@ body {
     font-style: italic;
 }
 
-/* 底部按钮 - 按照图片样式 */
+/* 底部按钮 */
 .footer {
     position: fixed;
     bottom: 0;
@@ -351,8 +252,8 @@ body {
         <div class="stat-value" id="progressText">1/33</div>
     </div>
     <div class="stat-item">
-        <div class="stat-label">正确率</div>
-        <div class="stat-value" id="accuracyText">0%</div>
+        <div class="stat-label">已掌握</div>
+        <div class="stat-value" id="masteredText">0/33</div>
     </div>
 </div>
 
@@ -360,34 +261,16 @@ body {
 
 <div class="card">
     <div class="question-header">
-        <span class="type" id="questionType">填空题</span>
+        <span class="type">解答题</span>
         <span class="question-number" id="questionNumber">第1题</span>
     </div>
     
     <div class="question" id="questionText"></div>
     
-    <!-- 填空题部分 -->
-    <div class="fill-section" id="fillSection">
-        <div class="answer-input-container">
-            <input type="text" class="answer-input" id="userAnswer" 
-                   placeholder="请输入答案（多个答案用逗号、顿号或空格分隔）" 
-                   onkeypress="handleEnterKey(event)">
-        </div>
-        
-        <button class="submit-btn" onclick="submitAnswer()">提交答案</button>
-        
-        <!-- 填空题答案区域 -->
-        <div class="fill-answer-box" id="fillAnswerBox">
-            <div class="fill-answer-content" id="fillAnswerContent"></div>
-        </div>
-        
-        <div class="hint-box" id="hintBox"></div>
-    </div>
-    
     <!-- 解答题部分 -->
-    <div class="essay-section" id="essaySection" style="display: none;">
-        <div class="essay-answer-box" id="essayAnswerBox">
-            <div class="essay-answer-content" id="essayAnswerContent"></div>
+    <div class="answer-section">
+        <div class="answer-box" id="answerBox">
+            <div class="answer-content" id="answerContent"></div>
         </div>
     </div>
     
@@ -402,208 +285,164 @@ body {
 </div>
 
 <script>
-// ===== 题库数据 =====
+// ===== 题库数据（全部为解答题）=====
 const questionBank = {
     "第1章 概述": [
         {
-            type: "fill",
             q: "1.1 什么是传感器？",
-            a: "能够感受规定的被测量并按照一定规律转换成可用输出信号的器件和装置",
-            hint: "根据我国国家标准GB7665-87的定义"
+            a: "传感器是能够感受规定的被测量并按照一定规律转换成可用输出信号的器件和装置。这是根据我国国家标准GB7665-87的定义。"
         },
         {
-            type: "fill",
             q: "1.2 传感器由哪几部分组成？",
-            a: "敏感元件、转换元件、基本电路",
-            hint: "传感器的三大核心组成部分"
+            a: "传感器主要由三部分组成：\n1. 敏感元件：直接感受被测量并输出与被测量有确定关系的物理量；\n2. 转换元件：将敏感元件输出的物理量转换为电信号；\n3. 基本电路：对电信号进行放大、处理等操作。"
         },
         {
-            type: "essay",
             q: "1.3 简述传感器主要发展趋势。",
             a: "现代传感器正朝着集成化、网络化、数字化、多功能化、微型化、智能化光机电一体化方向发展，具有高精度、高性能、高灵敏度、高可靠性、高稳定性、长寿命、高信噪比、宽量程、无维护的特点。发展趋势总体表现为发展、利用新效应，开发新材料，提高传感器的性能和检测范围。"
         },
         {
-            type: "essay",
             q: "1.8 空调和电冰箱中采用了哪些传感器？它们分别起到什么作用？",
             a: "空调传感器：\n1. 温度传感器：检测室内/室外环境温度、蒸发器温度等，控制压缩机启停和风机速度。\n2. 红外传感器：接收遥控信号。\n\n电冰箱传感器：\n温度传感器：监测冷藏/冷冻室温度，控制压缩机启停和除霜。"
         }
     ],
     "第2章 传感器的基本特性": [
         {
-            type: "essay",
             q: "2.1 传感器的静态特性是什么？由哪些性能指标描述？",
-            a: "静特性是当输入量为常数或变化极慢时，传感器的输入输出特性。其主要指标有线性度、迟滞、重复性、分辨力、稳定性、温度稳定性、各种抗干扰稳定性。"
+            a: "传感器的静态特性是指当输入量为常数或变化极慢时，传感器的输入输出特性。其主要指标有：\n1. 线性度\n2. 迟滞\n3. 重复性\n4. 分辨力\n5. 稳定性\n6. 温度稳定性\n7. 各种抗干扰稳定性"
         },
         {
-            type: "essay",
             q: "2.2 传感器的线性度是如何确定的？确定拟合直线有哪些方法？传感器的线性度表征了什么含义？",
-            a: "1）实际传感器有非线性存在，线性度是将近似后的拟合直线与实际曲线进行比较，其中存在偏差，这个最大偏差称为传感器的非线性误差，即线性度。\n\n2）选取拟合的方法很多，主要有：理论线性度（理论拟合）；端基线性度（端点连线拟合）；独立线性度（端点平移拟合）；最小二乘法线性度。\n\n3）线性度是表征实际特性与拟合直线不吻合的参数。"
+            a: "1. 线性度的确定：实际传感器有非线性存在，线性度是将近似后的拟合直线与实际曲线进行比较，其中存在的最大偏差称为传感器的非线性误差，即线性度。\n\n2. 拟合直线的方法：\n   - 理论线性度（理论拟合）\n   - 端基线性度（端点连线拟合）\n   - 独立线性度（端点平移拟合）\n   - 最小二乘法线性度\n\n3. 线性度的含义：表征实际特性与拟合直线不吻合的参数。"
         },
         {
-            type: "fill",
             q: "2.10 传感器的标定与校准有什么不同？",
-            a: "标定是通过实验或计算确定传感器的测量量和真实值之间的关系，建立输出量与输入量的对应关系，适用于较高精度的仪器，通常在使用前进行。校准是在使用前或使用过程中，通过已知的标准量对传感器进行调整，使其输出更加准确。",
-            hint: "注意标定和校准的时间点和目的不同"
+            a: "1. 标定：通过实验或计算确定传感器的测量量和真实值之间的关系，建立输出量与输入量的对应关系，适用于较高精度的仪器，通常在使用前进行。\n\n2. 校准：在使用前或使用过程中，通过已知的标准量对传感器进行调整，使其输出更加准确。属于强制性检定之外的测量装置，如非强制性检定的计量器具。\n\n主要区别：标定是建立关系，校准是调整准确性。"
         }
     ],
     "第3章 电阻应变式传感器": [
         {
-            type: "essay",
             q: "3.1 何为电阻应变效应？怎样利用这种效应制成应变片？",
-            a: "电阻应变效应：导体在受到拉力或压力的外界力作用时，会产生机械变形，同时机械变形会引起导体阻值的变化，这种导体材料因变形而使其电阻值发生变化的现象称为电阻应变效应。\n\n制成应变片：当外力作用时，导体的电阻率、长度、截面积都会发生变化，从而引起电阻值的变化，通过测量电阻值的变化，检测出外界作用力的大小。"
+            a: "1. 电阻应变效应：导体在受到拉力或压力的外界力作用时，会产生机械变形，同时机械变形会引起导体阻值的变化，这种导体材料因变形而使其电阻值发生变化的现象称为电阻应变效应。\n\n2. 制成应变片：当外力作用时，导体的电阻率、长度、截面积都会发生变化，从而引起电阻值的变化。通过测量电阻值的变化，检测出外界作用力的大小。具体制造时，将应变敏感材料制成栅状结构，粘贴在基片上，引出电极。"
         },
         {
-            type: "essay",
             q: "3.4 金属应变片与半导体应变片在工作原理上有何不同？半导体应变片灵敏系数范围是多少，金属应变片灵敏系数范围是多少？",
-            a: "工作原理不同：金属导体应变片的电阻变化是利用机械形变产生的应变效应，对于半导体而言，应变传感器主要是利用半导体材料的压阻效应。\n\n灵敏系数：金属电阻丝的灵敏系数可近似写为 K≈1+2μ，即约2；半导体灵敏系数近似为 K≈πE≈50～100。"
+            a: "1. 工作原理不同：\n   - 金属应变片：利用机械形变产生的应变效应\n   - 半导体应变片：主要利用半导体材料的压阻效应\n\n2. 灵敏系数：\n   - 金属应变片：灵敏系数约为2（K≈1+2μ）\n   - 半导体应变片：灵敏系数约为50～100（K≈πE）\n\n半导体应变片的灵敏度远高于金属应变片。"
         },
         {
-            type: "essay",
             q: "3.5 一应变片的电阻R=120Ω，灵敏系数k=2.05，用作应变为800μm/m的传感元件。求：①ΔR和ΔR/R；②若电源电压U=3V，初始平衡时电桥的输出电压U₀。",
-            a: "① ΔR = R × k × ε = 120Ω × 2.05 × (800×10⁻⁶) = 0.1968Ω\nΔR/R = k × ε = 2.05 × (800×10⁻⁶) = 0.00164\n\n② U₀ = (U/4) × (ΔR/R) = (3/4) × 0.00164 = 0.00123V = 1.23mV"
+            a: "计算过程：\n① ΔR = R × k × ε \n   = 120Ω × 2.05 × (800×10⁻⁶) \n   = 0.1968Ω\n\nΔR/R = k × ε \n      = 2.05 × (800×10⁻⁶) \n      = 0.00164\n\n② U₀ = (U/4) × (ΔR/R) \n     = (3/4) × 0.00164 \n     = 0.00123V \n     = 1.23mV"
         },
         {
-            type: "essay",
             q: "3.7 下图为一直流电桥，试求输出电压。",
-            a: "① U₀ = (E/4) × (ΔR1/R1) = (4/4) × (1.2/120) = 0.01V\n② U₀ = 0V\n③ U₀ = (E/2) × (ΔR1/R1) = (4/2) × (1.2/120) = 0.02V",
+            a: "① 当R1为金属应变片，ΔR1=1.2Ω时：\n   U₀ = (E/4) × (ΔR1/R1) \n      = (4/4) × (1.2/120) \n      = 0.01V\n\n② 当R1,R2为金属应变片，感应应变大小，极性相同时：\n   U₀ = 0V（因为两个应变片同时变化，电桥平衡）\n\n③ 当R1,R2为金属应变片，感应应变大小不同，极性相反，且ΔR1=ΔR2=1.2Ω时：\n   U₀ = (E/2) × (ΔR1/R1) \n      = (4/2) × (1.2/120) \n      = 0.02V",
             image: true
         }
     ],
     "第4章 电容式传感器": [
         {
-            type: "essay",
             q: "4.1 如何改善单极式变极距型电容传感器的非线性？",
-            a: "非线性随相对位移的增加而增加，为保证线性度应限制相对位移的大小，即限制量程大小；起始极距与灵敏度、线性度相矛盾，所以变极距式电容传感器只适合小位移测量，限制初始极距的大小；为提高传感器的灵敏度和改善非线性关系，变极距式电容传感器一般采用差动结构。"
+            a: "改善方法：\n1. 限制相对位移大小：非线性随相对位移的增加而增加，为保证线性度应限制相对位移的大小，即限制量程大小。\n2. 限制初始极距：起始极距与灵敏度、线性度相矛盾，所以变极距式电容传感器只适合小位移测量。\n3. 采用差动结构：为提高传感器的灵敏度和改善非线性关系，变极距式电容传感器一般采用差动结构。"
         },
         {
-            type: "essay",
             q: "4.2 为什么高频工作时的电容式传感器连接电缆的长度不能任意变化？",
-            a: "低频时容抗较大，传输线的等效电感和电阻可忽略。而高频时容抗减小，等效电感和电阻不可忽略，这时接在传感器输出端相当于一个串联谐振，有一个谐振频率存在，当工作频率接近谐振频率时，串联谐振阻抗最小，电流最大，谐振对传感器的输出起破坏作用，使电路不能正常工作。通常工作频率10MHz以上就要考虑电缆线等效电感的影响。"
+            a: "原因：\n1. 低频时容抗较大，传输线的等效电感和电阻可忽略。\n2. 高频时容抗减小，等效电感和电阻不可忽略，这时接在传感器输出端相当于一个串联谐振。\n3. 有一个谐振频率存在，当工作频率接近谐振频率时，串联谐振阻抗最小，电流最大，谐振对传感器的输出起破坏作用，使电路不能正常工作。\n4. 通常工作频率10MHz以上就要考虑电缆线等效电感的影响。"
         },
         {
-            type: "essay",
             q: "4.3 电容式传感器测量液位的原理？画出示意图，写出原理与过程。",
-            a: "原理：电容式液位传感器是利用液体与空气的介电常数不同，通过测量电容值的变化来推算液位高度。\n\n过程：在液位测量中，传感器是同轴圆柱形电容器，一根金属棒作为内电极，容器壁或另一根金属管作为外电极，当液位变化时，改变了两种介质在电极间的分布比例。由于液体的介电常数较大，液位升高时，整体电容增大；液位降低时，整体电容减小。通过测量电容值的变化即可确定液位高度。",
+            a: "原理：电容式液位传感器是利用液体与空气的介电常数不同，通过测量电容值的变化来推算液位高度。\n\n过程：\n1. 在液位测量中，传感器是同轴圆柱形电容器，一根金属棒作为内电极，容器壁或另一根金属管作为外电极。\n2. 当液位变化时，改变了两种介质（液体和空气）在电极间的分布比例。\n3. 由于液体的介电常数较大，液位升高时，整体电容增大；液位降低时，整体电容减小。\n4. 通过测量电容值的变化即可确定液位高度。",
             image: true
         }
     ],
     "第5章 电感式传感器": [
         {
-            type: "essay",
             q: "5.1 何谓电感式传感器？电感式传感器分为哪几类？",
-            a: "电感式传感器是一种机-电转换装置，是利用线圈自感和互感的变化实现非电量电测的一种装置，传感器利用电磁感应定律将被测非电量转换为电感或互感的变化。\n\n种类：自感式、涡流式、差动式、变压式等。"
+            a: "电感式传感器定义：是一种机-电转换装置，利用线圈自感和互感的变化实现非电量电测的装置，利用电磁感应定律将被测非电量转换为电感或互感的变化。\n\n分类：\n1. 自感式传感器\n2. 涡流式传感器\n3. 差动式传感器\n4. 变压式传感器"
         },
         {
-            type: "fill",
             q: "5.2 提高电感式传感器线性度有哪些有效的方法。",
-            a: "采用差动形式，转换电路采用相敏检波电路",
-            hint: "改善线性度的两种主要方法"
+            a: "有效方法：\n1. 采用差动形式：可以消除偶次谐波，提高线性度。\n2. 转换电路采用相敏检波电路：可以鉴别位移方向，改善线性度。\n3. 合理选择工作点：使传感器工作在近似线性区。\n4. 采用适当的磁路设计：减少漏磁，提高线性度。"
         },
         {
-            type: "essay",
             q: "5.10 什么叫电涡流效应？说明电涡流式传感器的基本结构与工作原理。电涡流式传感器的基本特性有哪些？它是基于何种模型得到的？",
-            a: "1. 电涡流效应：块状金属导体置于变化的磁场中或在磁场中作用切割磁力线运动时，导体内部会产生一圈圈闭和的电流，这种电流叫电涡流，这种现象叫做电涡流效应。\n\n2. 结构与工作原理：形成涡流必须具备两个条件：第一存在交变磁场；第二导电体处于交变磁场中。电涡流式传感器通电后线圈周围产生交变磁场，金属导体置于线圈附近。当金属导体靠近交变磁场中时，导体内部就会产生涡流，这个涡流同样产生交变磁场。由于磁场的反作用使线圈的等效电感和等效阻抗发生变化，使流过线圈的电流大小、相位都发生变化。通过检测与阻抗有关的参数进行非电量检测。\n\n3. 基本特性：因为金属存在趋肤效应，电涡流只存在于金属导体的表面薄层内，实际上涡流的分布是不均匀的。涡流区内各处的涡流密度不同，存在径向分布和轴向分布。所以电涡流传感器的检测范围与传感器的尺寸（线圈直径）有关。"
+            a: "1. 电涡流效应：块状金属导体置于变化的磁场中或在磁场中作用切割磁力线运动时，导体内部会产生一圈圈闭和的电流，这种电流叫电涡流，这种现象叫做电涡流效应。\n\n2. 基本结构与工作原理：\n   - 结构：主要由线圈、框架和屏蔽罩组成。\n   - 工作原理：线圈通以高频电流产生交变磁场，当金属导体靠近时产生涡流，涡流产生反磁场使线圈阻抗变化，通过检测阻抗变化进行测量。\n\n3. 基本特性：\n   - 趋肤效应：电涡流只存在于金属导体表面薄层内\n   - 检测范围有限，与线圈直径有关\n   - 涡流分布不均匀，存在径向和轴向分布\n\n4. 模型：基于电磁场理论和麦克斯韦方程组建立的模型。"
         }
     ],
     "第6章 磁电式传感器": [
         {
-            type: "essay",
             q: "6.1 试述磁电感应式传感器的工作原理和结构形式。",
-            a: "工作原理：基于电磁感应定律，当导体在磁场中运动切割磁力线或线圈中的磁通发生变化时，导体或线圈中会产生感应电动势。\n\n结构形式：主要有动圈式和动铁式。"
+            a: "工作原理：基于电磁感应定律，当导体在磁场中运动切割磁力线或线圈中的磁通发生变化时，导体或线圈中会产生感应电动势。\n\n结构形式：\n1. 动圈式：线圈在磁场中运动，产生感应电动势。\n2. 动铁式：磁铁在线圈中运动，改变磁通量。\n3. 变磁阻式：通过改变磁路的磁阻来改变磁通量。"
         },
         {
-            type: "fill",
             q: "6.4 什么是霍尔效应？",
-            a: "通电的导体（半导体）放在磁场中，电流与磁场垂直，在导体另外两侧会产生感应电动势，这种现象称霍尔效应",
-            hint: "霍尔效应的基本条件：通电导体、垂直磁场"
+            a: "霍尔效应：\n1. 定义：通电的导体（半导体）放在磁场中，电流与磁场垂直，在导体另外两侧会产生感应电动势，这种现象称霍尔效应。\n2. 条件：需要同时存在电流和磁场，且两者方向垂直。\n3. 应用：利用霍尔效应可以测量磁场、电流、位移等物理量。"
         },
         {
-            type: "essay",
             q: "6.10 列举1～2个霍尔元件的应用例子。",
-            a: "1. 电动汽车的电机控制与安全保护：实时监测电机情况，辅助控制转速与力矩。\n\n2. 无线蓝牙耳机的充电盒：监测盖子是否打开，耳机是否拿出来，实现自动休眠与唤醒等功能。"
+            a: "应用例子：\n1. 电动汽车的电机控制与安全保护：\n   - 实时监测电机转速、位置\n   - 辅助控制转速与力矩\n   - 提供过流保护\n\n2. 无线蓝牙耳机的充电盒：\n   - 监测盖子是否打开\n   - 检测耳机是否在充电盒内\n   - 实现自动休眠与唤醒功能\n\n3. 其他应用：电流传感器、位置传感器、转速测量等。"
         }
     ],
     "第7章 压电式传感器": [
         {
-            type: "essay",
             q: "7.1 什么是压电效应？什么是正压电效应和逆压电效应？",
-            a: "压电效应：某些电介质在沿一定的方向受到外力的作用变形时，由于内部电极化现象同时在两个表面上产生符号相反的电荷，当外力去掉后，恢复到不带电的状态；而当作用力方向改变时，电荷的极性随着改变。\n\n正压电效应（也称压电效应）：外力作用下产生电荷。\n\n逆压电效应：对晶体施加一定变电场，晶体本身将产生机械变形，外电场撤离，变形也随之消失。"
+            a: "压电效应：某些电介质在沿一定的方向受到外力的作用变形时，由于内部电极化现象同时在两个表面上产生符号相反的电荷，当外力去掉后，恢复到不带电的状态；而当作用力方向改变时，电荷的极性随着改变。\n\n正压电效应（也称压电效应）：\n- 外力作用下产生电荷\n- 机械能→电能\n- 应用：压力传感器、加速度计\n\n逆压电效应：\n- 电场作用下产生机械变形\n- 电能→机械能\n- 应用：超声波发生器、微位移器"
         },
         {
-            type: "fill",
             q: "7.9 为什么压电器件一定要高阻抗输出？",
-            a: "为了匹配高阻抗负载，提高信号传输效率。压电器件输出的是微弱的电荷信号，如果负载阻抗较低，电荷会迅速泄漏，导致信号失真或测量不准确。高阻抗输出可以有效减少这种电荷泄漏，保证信号的完整性。",
-            hint: "主要是为了防止电荷泄漏"
+            a: "原因：\n1. 匹配高阻抗负载：压电器件输出的是微弱的电荷信号，需要高阻抗负载才能有效传输。\n2. 防止电荷泄漏：如果负载阻抗较低，电荷会迅速泄漏，导致信号失真或测量不准确。\n3. 提高信号传输效率：高阻抗输出可以有效减少这种电荷泄漏，保证信号的完整性。\n4. 提高测量精度：高阻抗可以减少信号衰减，提高测量精度。"
         }
     ],
     "第8章 光电效应及器件": [
         {
-            type: "essay",
             q: "8.1 什么是内光电效应？什么是外光电效应？说明其工作原理并指出相应的典型光电器件。",
-            a: "内光电效应：当光线照在物体上，使物体的电导率发生变化，或产生光生电动势的现象叫做内光电效应。\n内光电效应又分为：\n1. 光电导效应：入射光强改变物质导电率的物理现象，典型光电器件有光敏电阻。\n2. 光生伏特效应：光照时物体中能产生一定方向电动势的现象，典型光电器件有光电池、光敏晶体管。\n\n外光电效应：在光线作用下，物体内的电子逸出物体表面向外发射的现象称为外光电效应，典型的光电器件有光电管、光电倍增管。"
+            a: "内光电效应：当光线照在物体上，使物体的电导率发生变化，或产生光生电动势的现象叫做内光电效应。\n分为两类：\n1. 光电导效应：入射光强改变物质导电率的物理现象。\n   - 典型器件：光敏电阻\n\n2. 光生伏特效应：光照时物体中能产生一定方向电动势的现象。\n   - 典型器件：光电池、光敏晶体管\n\n外光电效应：在光线作用下，物体内的电子逸出物体表面向外发射的现象。\n- 典型器件：光电管、光电倍增管"
         },
         {
-            type: "fill",
             q: "8.4 什么是光敏电阻的亮电阻和暗电阻？暗电阻电阻值通常在什么范围？",
-            a: "暗电阻：无光照时的电阻为暗电阻，暗电阻电阻值范围一般为0.5～200MΩ；亮电阻：受光照时的电阻称亮电阻，亮电阻的阻值一般为0.5～20KΩ。",
-            hint: "暗电阻大，亮电阻小"
+            a: "1. 暗电阻：无光照时的电阻。\n   - 电阻值范围：一般为0.5～200MΩ\n   - 特点：阻值很大\n\n2. 亮电阻：受光照时的电阻。\n   - 电阻值范围：一般为0.5～20KΩ\n   - 特点：阻值较小\n\n说明：光照使半导体产生电子-空穴对，电导率增加，电阻减小。光照越强，电阻越小。"
         },
         {
-            type: "essay",
             q: "8.12 举出日常生活中的两个光电式传感器的应用例子，并说明原理。",
-            a: "1. 光控路灯：天黑自动亮灯，天亮自动熄灭。原理：利用光敏电阻或光敏二极管检测环境光强。\n\n2. 手机自动亮度：环境光强时屏幕变亮，暗时变暗保护眼睛。原理：利用光传感器检测环境光强度。"
+            a: "例子1：光控路灯\n- 原理：利用光敏电阻或光敏二极管检测环境光强。\n- 工作：天黑时（光照弱），光敏电阻阻值增大，电路导通，路灯亮；天亮时（光照强），光敏电阻阻值减小，电路断开，路灯灭。\n\n例子2：手机自动亮度调节\n- 原理：利用光传感器检测环境光强度。\n- 工作：环境光强时，自动调亮屏幕；环境光暗时，自动调暗屏幕，既保证观看舒适，又节约电量。"
         }
     ],
     "第9章 新型光电传感器": [
         {
-            type: "fill",
             q: "9.1 CCD主要由哪两部分组成？",
-            a: "MOS光敏元阵列、读出移位寄存器",
-            hint: "CCD的两大核心部分"
+            a: "CCD（电荷耦合器件）主要由两部分组成：\n1. MOS光敏元阵列：\n   - 用于光电转换\n   - 将光信号转换为电荷信号\n   - 按矩阵排列\n\n2. 读出移位寄存器：\n   - 用于电荷转移\n   - 将电荷信号顺序读出\n   - 实现信号的串行输出"
         },
         {
-            type: "fill",
             q: "9.8 光纤传感器有哪两大类型？",
-            a: "传光型，功能型",
-            hint: "光纤传感器的两种主要分类"
+            a: "光纤传感器主要分为两大类型：\n1. 传光型光纤传感器：\n   - 光纤仅作为传光介质\n   - 敏感元件在光纤外部\n   - 结构相对简单\n\n2. 功能型光纤传感器：\n   - 光纤本身作为敏感元件\n   - 光纤特性随被测量变化\n   - 灵敏度较高"
         }
     ],
     "第12章 热电式传感器": [
         {
-            type: "essay",
             q: "12.1 什么是热电效应？热电偶测温回路的热电动势由哪两部分组成？由同一种导体组成的闭合回路能产生热电势吗？",
-            a: "1. 热电效应：两种不同类型的金属导体两端分别接在一起构成闭合回路，当两个结点有温差时，导体回路里有电流流动会产生热电势，这种现象称为热电效应。\n\n2. 热电动势组成：热电偶测温回路中热电势主要是由接触电势和温差电势两部分组成。\n\n3. 同种导体：热电偶两个电极材料相同时，无论两端点温度如何变化无热电势产生。"
+            a: "1. 热电效应：两种不同类型的金属导体两端分别接在一起构成闭合回路，当两个结点有温差时，导体回路里有电流流动会产生热电势，这种现象称为热电效应。\n\n2. 热电动势组成：\n   - 接触电势：两种不同材料接触处产生的电势\n   - 温差电势：同一种材料两端温差产生的电势\n\n3. 同种导体：热电偶两个电极材料相同时，无论两端点温度如何变化，无热电势产生。因为需要两种不同材料才能产生接触电势。"
         },
         {
-            type: "essay",
             q: "12.4 试比较热电偶、热电阻、热敏电阻三种热电式传感器的特点。",
-            a: "热电偶：可以测量上千度高温，并且精度高、性能好，这是其它温度传感器无法替代。\n\n热电阻：结构很简单，金属热电阻材料多为纯铂金属丝，也有铜、镍金属。金属热电阻广泛用于测量-200～+850℃温度范围，少数可以测量1000℃。\n\n热敏电阻：由半导体材料制成，外形大小与电阻的功率有关，差别较大。热敏电阻用途很广，几乎所有家用电器产品都装有微处理器，这些温度传感器多使用热敏电阻。"
+            a: "热电偶：\n- 优点：可测上千度高温，精度高、性能好\n- 缺点：需要冷端补偿，灵敏度较低\n- 应用：高温测量\n\n热电阻：\n- 优点：结构简单，稳定性好\n- 缺点：需要电流激励，存在自热效应\n- 应用：-200～+850℃范围，工业测温\n\n热敏电阻：\n- 优点：灵敏度高，响应快，体积小\n- 缺点：非线性大，互换性差\n- 应用：家用电器，温度补偿，温度控制"
         }
     ],
     "第14章 生物传感器": [
         {
-            type: "fill",
             q: "常见生物传感器有哪些？",
-            a: "酶传感器、微生物传感器、细胞传感器、免疫传感器、组织传感器",
-            hint: "五种常见的生物传感器类型"
+            a: "常见的生物传感器主要有五类：\n1. 酶传感器：利用酶的特异性催化作用\n2. 微生物传感器：利用微生物的代谢功能\n3. 细胞传感器：利用细胞的生理功能\n4. 免疫传感器：利用抗原-抗体特异性反应\n5. 组织传感器：利用生物组织的特性\n\n应用领域：医疗诊断、环境监测、食品检测等。"
         }
     ],
     "第15章 集成智能传感器": [
         {
-            type: "essay",
             q: "1. 什么是智能传感器？什么是集成智能传感器？",
-            a: "智能传感器：是集成传感器、微处理器、通信模块及软件算法的系统级产品，具备信息采集、处理、交换和存储能力。\n\n集成智能传感器：是智能传感器的一种实现形式，采用微机械加工和集成电路工艺，将敏感元件、信号调理电路及微处理器集成在同一芯片上，集成度高，体积小。"
+            a: "智能传感器：\n- 定义：集成传感器、微处理器、通信模块及软件算法的系统级产品\n- 功能：具备信息采集、处理、交换和存储能力\n- 特点：具有自诊断、自补偿、自适应功能\n\n集成智能传感器：\n- 定义：智能传感器的一种实现形式\n- 工艺：采用微机械加工和集成电路工艺\n- 特点：将敏感元件、信号调理电路及微处理器集成在同一芯片上，集成度高，体积小"
         },
         {
-            type: "fill",
             q: "2. 集成智能传感器的主要特点是什么？",
-            a: "高精度，宽量程，多功能化，高可靠性，高性价比，自适应能力，微型化，微功耗",
-            hint: "集成智能传感器的八个主要特点"
+            a: "集成智能传感器的主要特点：\n1. 高精度：采用数字化处理，减少误差\n2. 宽量程：可适应不同测量范围\n3. 多功能化：一机多用，节约空间\n4. 高可靠性：集成化减少连接点\n5. 高性价比：批量生产降低成本\n6. 自适应能力：自动调整工作状态\n7. 微型化：体积小，重量轻\n8. 微功耗：低功耗设计，节能"
         },
         {
-            type: "essay",
             q: "3. 为什么集成智能传感器是现代传感器技术的主要发展趋势？",
-            a: "技术融合：计算机、微电子与传感技术的结合推动传感器向智能化、微型化发展。\n\n应用需求：工业自动化、航空航天、医疗健康等领域对传感器精度、可靠性及多功能化提出更高要求。\n\n成本效益：集成化设计降低生产成本，提高性能价格比，适应大规模应用需求。\n\n技术突破：微机械加工和集成电路工艺的进步，使集成智能传感器成为可能。\n\n集成智能传感器通过技术融合与成本优化，成为现代传感器技术的核心发展方向。"
+            a: "集成智能传感器成为主要发展趋势的原因：\n1. 技术融合：计算机、微电子与传感技术的结合推动传感器向智能化、微型化发展。\n2. 应用需求：工业自动化、航空航天、医疗健康等领域对传感器精度、可靠性及多功能化提出更高要求。\n3. 成本效益：集成化设计降低生产成本，提高性能价格比，适应大规模应用需求。\n4. 技术突破：微机械加工和集成电路工艺的进步，使集成智能传感器成为可能。\n5. 核心发展方向：通过技术融合与成本优化，成为现代传感器技术的核心发展方向。"
         }
     ]
 };
@@ -611,10 +450,9 @@ const questionBank = {
 // ===== 全局变量 =====
 let currentChapter = "第1章 概述";
 let currentQuestionIndex = 0;
-let showAnswerMode = false; // 是否显示答案模式
+let showAnswerMode = false;
+let masteredQuestions = new Set(); // 已掌握题目的集合
 let stats = {
-    totalAttempts: 0,
-    correctAnswers: 0,
     totalQuestions: calculateTotalQuestions()
 };
 
@@ -637,7 +475,7 @@ function initializeChapters() {
         const btn = document.createElement("button");
         btn.className = "chapter-btn";
         btn.textContent = chapter;
-        btn.title = chapter; // 添加title属性，鼠标悬停时显示完整名称
+        btn.title = chapter;
         btn.onclick = () => switchChapter(chapter);
         chapterBar.appendChild(btn);
     });
@@ -685,34 +523,25 @@ function loadQuestion() {
     document.getElementById("progressText").textContent = `${globalIndex}/${stats.totalQuestions}`;
     document.getElementById("questionNumber").textContent = `第${globalIndex}题`;
     
-    // 根据题型显示不同内容
-    if (question.type === "fill") {
-        document.getElementById("questionType").textContent = "填空题";
-        document.getElementById("fillSection").style.display = "block";
-        document.getElementById("essaySection").style.display = "none";
-        document.getElementById("userAnswer").value = "";
-        document.getElementById("hintBox").className = "hint-box";
-        document.getElementById("hintBox").style.display = "none";
-        
-        // 更新填空题答案区域
-        if (showAnswerMode) {
-            document.getElementById("fillAnswerBox").style.display = "block";
-            document.getElementById("fillAnswerContent").textContent = question.a;
-        } else {
-            document.getElementById("fillAnswerBox").style.display = "none";
-        }
-        
+    // 更新答案内容
+    const answerBox = document.getElementById("answerBox");
+    const answerContent = document.getElementById("answerContent");
+    
+    if (showAnswerMode) {
+        answerContent.textContent = question.a;
+        answerBox.style.background = "#f1f8e9";
+        answerBox.style.borderColor = "#4caf50";
     } else {
-        document.getElementById("questionType").textContent = "解答题";
-        document.getElementById("fillSection").style.display = "none";
-        document.getElementById("essaySection").style.display = "block";
-        
-        // 更新解答题答案内容
-        if (showAnswerMode) {
-            document.getElementById("essayAnswerContent").textContent = question.a;
-        } else {
-            document.getElementById("essayAnswerContent").textContent = "点击【提交对答案】按钮显示参考答案";
-        }
+        answerContent.textContent = "点击【提交对答案】按钮查看参考答案";
+        answerBox.style.background = "#f8f9fa";
+        answerBox.style.borderColor = "#e0e0e0";
+    }
+    
+    // 检查是否已掌握
+    const questionKey = `${currentChapter}_${currentQuestionIndex}`;
+    if (masteredQuestions.has(questionKey)) {
+        answerBox.style.borderColor = "#ff9800";
+        answerBox.style.background = "#fff3e0";
     }
     
     // 处理图片显示
@@ -761,81 +590,16 @@ function updateNavButtons() {
     }
 }
 
-// ===== 提交答案（填空题） =====
-function submitAnswer() {
-    const userAnswer = document.getElementById("userAnswer").value.trim();
-    const correctAnswer = questionBank[currentChapter][currentQuestionIndex].a;
-    
-    if (!userAnswer) {
-        alert("请输入答案");
-        return;
-    }
-    
-    stats.totalAttempts++;
-    
-    // 答案对比
-    const isCorrect = compareAnswers(userAnswer, correctAnswer);
-    
-    const hintBox = document.getElementById("hintBox");
-    if (isCorrect) {
-        stats.correctAnswers++;
-        hintBox.innerHTML = "<strong>✓ 回答正确！</strong>";
-        hintBox.className = "hint-box correct";
-        
-        // 显示答案
-        showAnswerMode = true;
-        loadQuestion();
-    } else {
-        hintBox.innerHTML = `<div style="margin-bottom: 8px;"><strong>✗ 答案不正确</strong></div>`;
-        hintBox.className = "hint-box incorrect";
-        
-        // 显示正确答案提示
-        showAnswerMode = true;
-        loadQuestion();
-    }
-    
-    hintBox.style.display = "block";
-    updateProgress();
-}
-
-// ===== 答案对比函数 =====
-function compareAnswers(userAnswer, correctAnswer) {
-    // 处理用户输入
-    const user = userAnswer
-        .replace(/，/g, ',')
-        .replace(/、/g, ',')
-        .replace(/\s+/g, ',')
-        .split(',')
-        .filter(item => item.trim())
-        .map(item => item.trim().toLowerCase());
-    
-    // 处理正确答案
-    const correct = correctAnswer
-        .replace(/，/g, ',')
-        .replace(/、/g, ',')
-        .replace(/\s+/g, ',')
-        .split(',')
-        .filter(item => item.trim())
-        .map(item => item.trim().toLowerCase());
-    
-    // 长度不同直接返回false
-    if (user.length !== correct.length) return false;
-    
-    // 排序后比较
-    const sortedUser = [...user].sort();
-    const sortedCorrect = [...correct].sort();
-    
-    for (let i = 0; i < sortedUser.length; i++) {
-        if (sortedUser[i] !== sortedCorrect[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
 // ===== 切换答案模式 =====
 function toggleAnswerMode() {
     showAnswerMode = !showAnswerMode;
+    
+    // 如果显示答案，标记为已掌握
+    if (showAnswerMode) {
+        const questionKey = `${currentChapter}_${currentQuestionIndex}`;
+        masteredQuestions.add(questionKey);
+    }
+    
     loadQuestion();
 }
 
@@ -886,16 +650,8 @@ function nextQuestion() {
 
 // ===== 更新进度 =====
 function updateProgress() {
-    const accuracy = stats.totalAttempts > 0 ? 
-        Math.round((stats.correctAnswers / stats.totalAttempts) * 100) : 0;
-    document.getElementById("accuracyText").textContent = `${accuracy}%`;
-}
-
-// ===== 回车键提交 =====
-function handleEnterKey(event) {
-    if (event.key === 'Enter') {
-        submitAnswer();
-    }
+    const masteredCount = masteredQuestions.size;
+    document.getElementById("masteredText").textContent = `${masteredCount}/${stats.totalQuestions}`;
 }
 
 // ===== 初始化 =====
@@ -917,13 +673,10 @@ document.addEventListener('keydown', function(e) {
         case 'ArrowRight':
             nextQuestion();
             break;
-        case 'Enter':
-            const question = questionBank[currentChapter][currentQuestionIndex];
-            if (question.type === "fill" && document.activeElement.id === "userAnswer") {
-                submitAnswer();
-            }
-            break;
         case ' ':
+            toggleAnswerMode();
+            break;
+        case 'Enter':
             toggleAnswerMode();
             break;
     }
