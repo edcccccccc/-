@@ -2,137 +2,107 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>传感器题库做题系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刷试卷</title>
+
 <style>
 body {
+    margin: 0;
+    background: #f2f2f2;
     font-family: "Microsoft YaHei", sans-serif;
-    background: #f5f7fa;
-    padding: 30px;
 }
-.container {
-    max-width: 900px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-h1 {
+
+/* 顶部栏 */
+.header {
+    background: #ffffff;
+    padding: 14px;
     text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
 }
-button {
-    padding: 10px 20px;
-    margin-top: 15px;
-    margin-right: 10px;
-    cursor: pointer;
+
+/* 主体卡片 */
+.card {
+    background: #ffffff;
+    margin: 12px;
+    padding: 16px;
+    border-radius: 8px;
 }
-.option {
-    margin: 8px 0;
-}
-.answer {
-    margin-top: 15px;
-    color: green;
-    display: none;
-}
+
+/* 题型 */
 .type {
     color: #666;
+    font-size: 14px;
     margin-bottom: 10px;
 }
-textarea {
-    width: 100%;
-    height: 80px;
+
+/* 题目 */
+.question {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* 选项 */
+.option {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #f5f5f5;
+}
+
+/* 答案 */
+.answer {
+    margin-top: 15px;
+    color: #2e7d32;
+    display: none;
+    font-size: 15px;
+}
+
+/* 底部按钮栏 */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top: 1px solid #ddd;
+    display: flex;
+}
+
+.footer button {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    background: none;
+    font-size: 16px;
+}
+
+.footer button:nth-child(2) {
+    background: #333;
+    color: #fff;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
-    <h1>传感器原理在线做题系统</h1>
+
+<div class="header">刷试卷</div>
+
+<div class="card">
     <div class="type" id="type"></div>
-    <div id="question"></div>
+    <div class="question" id="question"></div>
     <div id="options"></div>
-
-    <button onclick="showAnswer()">显示答案</button>
-    <button onclick="nextQuestion()">下一题</button>
-
     <div class="answer" id="answer"></div>
 </div>
 
-<script>
-const questionBank = [
-    { q: "什么是传感器？", a: "能够感受被测量并按照一定规律转换成可用输出信号的器件或装置。" },
-    { q: "传感器由哪几部分组成？", a: "由敏感元件、转换元件和基本电路组成。" },
-    { q: "什么是电阻应变效应？", a: "导体在受力变形时，其电阻值发生变化的现象称为电阻应变效应。" },
-    { q: "什么是霍尔效应？", a: "通电导体在磁场中，垂直于电流和磁场方向会产生电势差的现象。" },
-    { q: "为什么压电式传感器需要高阻抗输出？", a: "为了防止电荷泄漏，提高信号传输效率和测量精度。" }
-];
-
-let currentAnswer = "";
-
-function nextQuestion() {
-    document.getElementById("answer").style.display = "none";
-    document.getElementById("options").innerHTML = "";
-
-    const item = questionBank[Math.floor(Math.random() * questionBank.length)];
-    const r = Math.random();
-
-    if (r < 0.25) makeChoice(item);
-    else if (r < 0.5) makeBlank(item);
-    else if (r < 0.75) makeShort(item);
-    else makeEssay(item);
-}
-
-function makeChoice(item) {
-    document.getElementById("type").innerText = "【选择题】";
-    document.getElementById("question").innerText = item.q;
-
-    const opts = shuffle([
-        item.a,
-        "一种电子放大电路",
-        "只用于测量温度的装置",
-        "信号处理芯片"
-    ]);
-
-    opts.forEach((o, i) => {
-        document.getElementById("options").innerHTML +=
-            `<div class="option"><input type="radio" name="opt"> ${String.fromCharCode(65+i)}. ${o}</div>`;
-    });
-
-    currentAnswer = "正确答案：" + item.a;
-}
-
-function makeBlank(item) {
-    document.getElementById("type").innerText = "【填空题】";
-    document.getElementById("question").innerText = item.q.replace("什么是", "________ 是");
-    document.getElementById("options").innerHTML = "<input placeholder='请输入答案'>";
-    currentAnswer = "参考答案：" + item.a;
-}
-
-function makeShort(item) {
-    document.getElementById("type").innerText = "【简答题】";
-    document.getElementById("question").innerText = item.q;
-    document.getElementById("options").innerHTML = "<textarea placeholder='请输入你的答案'></textarea>";
-    currentAnswer = "参考答案：" + item.a;
-}
-
-function makeEssay(item) {
-    document.getElementById("type").innerText = "【论述题】";
-    document.getElementById("question").innerText = "请简要论述：" + item.q;
-    document.getElementById("options").innerHTML = "<textarea placeholder='请输入你的答案'></textarea>";
-    currentAnswer = "参考答案：" + item.a;
-}
-
-function showAnswer() {
-    const a = document.getElementById("answer");
-    a.innerText = currentAnswer;
-    a.style.display = "block";
-}
-
-function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-}
-
-nextQuestion();
-</script>
-</body>
-</html>
+<div class="footer">
+    <button onclick="nextQuestion()">上一题</button>
+    <button onclick="showAnswer()">提交对答案</button>
+    <button onclick="nextQuestion()">下一题
