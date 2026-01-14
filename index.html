@@ -12,7 +12,6 @@ body {
     font-family: "Microsoft YaHei", sans-serif;
 }
 
-/* 顶部栏 */
 .header {
     background: #ffffff;
     padding: 14px;
@@ -22,7 +21,6 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-/* 主体卡片 */
 .card {
     background: #ffffff;
     margin: 12px;
@@ -30,21 +28,18 @@ body {
     border-radius: 8px;
 }
 
-/* 题型 */
 .type {
     color: #666;
     font-size: 14px;
     margin-bottom: 10px;
 }
 
-/* 题目 */
 .question {
     font-size: 16px;
     line-height: 1.6;
     margin-bottom: 15px;
 }
 
-/* 选项 */
 .option {
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -57,7 +52,6 @@ body {
     background: #f5f5f5;
 }
 
-/* 答案 */
 .answer {
     margin-top: 15px;
     color: #2e7d32;
@@ -65,7 +59,6 @@ body {
     font-size: 15px;
 }
 
-/* 底部按钮栏 */
 .footer {
     position: fixed;
     bottom: 0;
@@ -105,4 +98,61 @@ body {
 <div class="footer">
     <button onclick="nextQuestion()">上一题</button>
     <button onclick="showAnswer()">提交对答案</button>
-    <button onclick="nextQuestion()">下一题
+    <button onclick="nextQuestion()">下一题</button>
+</div>
+
+<script>
+const questionBank = [
+    {
+        q: "某地居民使用家里的老式风扇，只有一档、二档、三档开关，调完档位后风扇转速不再根据室温变化而改变。就风扇转速控制来看，该系统是：",
+        a: "开环控制系统"
+    },
+    {
+        q: "什么是传感器？",
+        a: "能够感受被测量并按照一定规律转换成可用输出信号的器件或装置。"
+    }
+];
+
+let currentAnswer = "";
+
+function nextQuestion() {
+    document.getElementById("answer").style.display = "none";
+    document.getElementById("options").innerHTML = "";
+
+    const item = questionBank[Math.floor(Math.random() * questionBank.length)];
+
+    document.getElementById("type").innerText = "单选题";
+    document.getElementById("question").innerText = item.q;
+
+    const options = shuffle([
+        item.a,
+        "闭环控制系统",
+        "既是开环又是闭环",
+        "以上都不对"
+    ]);
+
+    options.forEach(opt => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.innerText = opt;
+        document.getElementById("options").appendChild(div);
+    });
+
+    currentAnswer = "正确答案：" + item.a;
+}
+
+function showAnswer() {
+    const a = document.getElementById("answer");
+    a.innerText = currentAnswer;
+    a.style.display = "block";
+}
+
+function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+}
+
+nextQuestion();
+</script>
+
+</body>
+</html>
