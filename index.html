@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -228,47 +229,81 @@
             line-height: 1.8;
         }
 
+        /* ===== 修改控制按钮样式，按照图片样式 ===== */
         .controls {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
         }
 
         .btn {
             flex: 1;
-            padding: 12px;
-            border: none;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-        }
-
-        .btn-prev {
-            background: #f5f5f5;
+            background: white;
             color: #333;
-        }
-
-        .btn-submit {
-            background: #333;
-            color: white;
-        }
-
-        .btn-next {
-            background: #4CAF50;
-            color: white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn:hover:not(:disabled) {
-            opacity: 0.9;
-            transform: translateY(-2px);
+            background: #f8f9fa;
+            border-color: #2196F3;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            background: #f5f5f5;
         }
+
+        /* 特定按钮样式 */
+        .btn-prev {
+            border-color: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+
+        .btn-submit {
+            border-color: #333;
+            background: #333;
+            color: white;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #444;
+            border-color: #444;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+.btn-next {
+    border-color: #e0e0e0;
+    color: #666;
+}
+
+.btn-next:hover:not(:disabled) {
+    border-color: #2196F3;
+    color: #2196F3;
+}
 
         .multi-hint {
             text-align: center;
@@ -293,10 +328,13 @@
             
             .controls {
                 flex-direction: column;
+                gap: 8px;
             }
             
             .btn {
                 width: 100%;
+                padding: 12px;
+                font-size: 15px;
             }
         }
     </style>
