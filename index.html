@@ -12,8 +12,9 @@ body {
     font-family: "Microsoft YaHei", sans-serif;
 }
 
+/* 顶部标题 */
 .header {
-    background: #ffffff;
+    background: #fff;
     padding: 14px;
     text-align: center;
     font-size: 18px;
@@ -21,23 +22,44 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
+/* 章节栏 */
+.chapter-bar {
+    display: flex;
+    overflow-x: auto;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.chapter-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.chapter-btn.active {
+    color: #1976d2;
+    border-bottom: 2px solid #1976d2;
+}
+
+/* 题目卡片 */
 .card {
-    background: #ffffff;
+    background: #fff;
     margin: 12px;
     padding: 16px;
     border-radius: 8px;
 }
 
 .type {
-    color: #666;
     font-size: 14px;
-    margin-bottom: 10px;
+    color: #666;
+    margin-bottom: 8px;
 }
 
 .question {
     font-size: 16px;
     line-height: 1.6;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .option {
@@ -45,28 +67,23 @@ body {
     border-radius: 6px;
     padding: 12px;
     margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.option:hover {
-    background: #f5f5f5;
 }
 
 .answer {
-    margin-top: 15px;
-    color: #2e7d32;
     display: none;
-    font-size: 15px;
+    margin-top: 12px;
+    color: #2e7d32;
 }
 
+/* 底部按钮 */
 .footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: #ffffff;
-    border-top: 1px solid #ddd;
     display: flex;
+    background: #fff;
+    border-top: 1px solid #ddd;
 }
 
 .footer button {
@@ -88,6 +105,8 @@ body {
 
 <div class="header">刷试卷</div>
 
+<div class="chapter-bar" id="chapters"></div>
+
 <div class="card">
     <div class="type" id="type"></div>
     <div class="question" id="question"></div>
@@ -102,25 +121,60 @@ body {
 </div>
 
 <script>
-const questionBank = [
-    {
-        q: "某地居民使用家里的老式风扇，只有一档、二档、三档开关，调完档位后风扇转速不再根据室温变化而改变。就风扇转速控制来看，该系统是：",
-        a: "开环控制系统"
-    },
-    {
-        q: "什么是传感器？",
-        a: "能够感受被测量并按照一定规律转换成可用输出信号的器件或装置。"
-    }
-];
+// ===== 章节题库（来自你文档的真实题目样本）=====
+const questionBank = {
+    "第1章 概述": [
+        {
+            q: "什么是传感器？",
+            a: "能够感受被测量并按照一定规律转换成可用输出信号的器件和装置。"
+        },
+        {
+            q: "传感器由哪几部分组成？",
+            a: "由敏感元件、转换元件和基本电路组成。"
+        }
+    ],
+    "第2章 传感器的基本特性": [
+        {
+            q: "什么是传感器的静态特性？",
+            a: "当输入量为常数或变化极慢时，传感器的输入输出特性。"
+        }
+    ],
+    "第3章 电阻应变式传感器": [
+        {
+            q: "什么是电阻应变效应？",
+            a: "导体在受力或压力作用下发生形变，其电阻值发生变化的现象。"
+        }
+    ]
+};
 
+let currentChapter = "第1章 概述";
+let currentList = questionBank[currentChapter];
 let currentAnswer = "";
 
+// ===== 初始化章节按钮 =====
+const chapterBar = document.getElementById("chapters");
+Object.keys(questionBank).forEach((ch, idx) => {
+    const btn = document.createElement("div");
+    btn.className = "chapter-btn" + (idx === 0 ? " active" : "");
+    btn.innerText = ch;
+    btn.onclick = () => switchChapter(ch, btn);
+    chapterBar.appendChild(btn);
+});
+
+function switchChapter(chapter, btn) {
+    currentChapter = chapter;
+    currentList = questionBank[chapter];
+    document.querySelectorAll(".chapter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    nextQuestion();
+}
+
+// ===== 出题 =====
 function nextQuestion() {
     document.getElementById("answer").style.display = "none";
     document.getElementById("options").innerHTML = "";
 
-    const item = questionBank[Math.floor(Math.random() * questionBank.length)];
-
+    const item = currentList[Math.floor(Math.random() * currentList.length)];
     document.getElementById("type").innerText = "单选题";
     document.getElementById("question").innerText = item.q;
 
@@ -131,10 +185,10 @@ function nextQuestion() {
         "以上都不对"
     ]);
 
-    options.forEach(opt => {
+    options.forEach(o => {
         const div = document.createElement("div");
         div.className = "option";
-        div.innerText = opt;
+        div.innerText = o;
         document.getElementById("options").appendChild(div);
     });
 
