@@ -61,20 +61,26 @@ body {
     border-bottom: 1px solid #ddd;
     padding: 8px 0;
     white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
 }
 
 .chapter-btn {
-    padding: 10px 16px;
-    font-size: 14px;
+    padding: 10px 14px;
+    font-size: 13px;
     cursor: pointer;
     border: none;
     background: none;
     color: #666;
     border-radius: 4px;
-    margin: 0 2px;
-    min-width: 120px;
+    margin: 0 3px;
+    min-width: 100px;
+    max-width: 130px;
     text-align: center;
     transition: all 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
 }
 
 .chapter-btn:hover {
@@ -85,6 +91,18 @@ body {
     color: #1976d2;
     background: #e3f2fd;
     font-weight: bold;
+}
+
+.chapter-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    background: #1976d2;
+    border-radius: 2px;
 }
 
 /* 题目卡片 */
@@ -177,10 +195,28 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
+    margin-bottom: 15px;
 }
 
 .submit-btn:hover {
     background: #1565c0;
+}
+
+/* 填空题答案显示区域 */
+.fill-answer-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+    background: #f8f9fa;
+    display: none;
+}
+
+.fill-answer-content {
+    white-space: pre-line;
+    line-height: 1.6;
+    font-size: 15px;
+    color: #333;
 }
 
 /* 解答题答案区域 */
@@ -188,7 +224,7 @@ body {
     margin-top: 20px;
 }
 
-.answer-box {
+.essay-answer-box {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 20px;
@@ -196,7 +232,7 @@ body {
     background: #f8f9fa;
 }
 
-.answer-content {
+.essay-answer-content {
     white-space: pre-line;
     line-height: 1.6;
     font-size: 15px;
@@ -251,7 +287,7 @@ body {
     font-style: italic;
 }
 
-/* 底部按钮 */
+/* 底部按钮 - 按照图片样式 */
 .footer {
     position: fixed;
     bottom: 0;
@@ -260,71 +296,43 @@ body {
     display: flex;
     background: #fff;
     border-top: 2px solid #ddd;
-    padding: 12px 16px;
+    padding: 10px 16px;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    gap: 10px;
 }
 
-.footer button {
+.footer-btn {
     flex: 1;
     padding: 14px;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.footer button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.btn-prev {
-    background: #f5f5f5;
+    text-align: center;
     color: #333;
-    border: 1px solid #ddd;
+    background: none;
 }
 
-.btn-prev:hover:not(:disabled) {
-    background: #e9e9e9;
+.footer-btn:hover {
+    background: #f5f5f5;
 }
 
-.btn-answer {
+.footer-btn:nth-child(2) {
     background: #333;
     color: #fff;
+    margin: 0 10px;
+    border-radius: 4px;
 }
 
-.btn-answer:hover:not(:disabled) {
+.footer-btn:nth-child(2):hover {
     background: #555;
 }
 
-.btn-hint {
-    background: #ff9800;
-    color: #fff;
-}
-
-.btn-hint:hover:not(:disabled) {
-    background: #f57c00;
-}
-
-.btn-next {
-    background: #4caf50;
-    color: #fff;
-}
-
-.btn-next:hover:not(:disabled) {
-    background: #45a049;
-}
-
-/* 按钮图标 */
-.btn-icon {
-    font-size: 18px;
+.footer-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f5f5f5;
 }
 </style>
 </head>
@@ -368,13 +376,18 @@ body {
         
         <button class="submit-btn" onclick="submitAnswer()">提交答案</button>
         
+        <!-- 填空题答案区域 -->
+        <div class="fill-answer-box" id="fillAnswerBox">
+            <div class="fill-answer-content" id="fillAnswerContent"></div>
+        </div>
+        
         <div class="hint-box" id="hintBox"></div>
     </div>
     
     <!-- 解答题部分 -->
     <div class="essay-section" id="essaySection" style="display: none;">
-        <div class="answer-box" id="answerBox">
-            <div class="answer-content" id="answerContent"></div>
+        <div class="essay-answer-box" id="essayAnswerBox">
+            <div class="essay-answer-content" id="essayAnswerContent"></div>
         </div>
     </div>
     
@@ -383,22 +396,9 @@ body {
 </div>
 
 <div class="footer">
-    <button class="btn-prev" onclick="prevQuestion()" id="prevBtn">
-        <span class="btn-icon">←</span>
-        <span>上一题</span>
-    </button>
-    <button class="btn-answer" onclick="toggleAnswerMode()" id="answerBtn">
-        <span class="btn-icon">✓</span>
-        <span id="answerBtnText">查看答案</span>
-    </button>
-    <button class="btn-hint" onclick="showHint()" id="hintBtn">
-        <span class="btn-icon">💡</span>
-        <span id="hintBtnText">提示</span>
-    </button>
-    <button class="btn-next" onclick="nextQuestion()" id="nextBtn">
-        <span>下一题</span>
-        <span class="btn-icon">→</span>
-    </button>
+    <button class="footer-btn" onclick="prevQuestion()" id="prevBtn">上一题</button>
+    <button class="footer-btn" onclick="toggleAnswerMode()" id="answerBtn">提交对答案</button>
+    <button class="footer-btn" onclick="nextQuestion()" id="nextBtn">下一题</button>
 </div>
 
 <script>
@@ -611,7 +611,7 @@ const questionBank = {
 // ===== 全局变量 =====
 let currentChapter = "第1章 概述";
 let currentQuestionIndex = 0;
-let showAnswerMode = false;
+let showAnswerMode = false; // 是否显示答案模式
 let stats = {
     totalAttempts: 0,
     correctAnswers: 0,
@@ -637,6 +637,7 @@ function initializeChapters() {
         const btn = document.createElement("button");
         btn.className = "chapter-btn";
         btn.textContent = chapter;
+        btn.title = chapter; // 添加title属性，鼠标悬停时显示完整名称
         btn.onclick = () => switchChapter(chapter);
         chapterBar.appendChild(btn);
     });
@@ -693,28 +694,25 @@ function loadQuestion() {
         document.getElementById("hintBox").className = "hint-box";
         document.getElementById("hintBox").style.display = "none";
         
-        // 更新按钮状态
-        document.getElementById("hintBtn").disabled = !question.hint;
-        document.getElementById("hintBtnText").textContent = question.hint ? "提示" : "无提示";
-        document.getElementById("answerBtnText").textContent = "查看答案";
+        // 更新填空题答案区域
+        if (showAnswerMode) {
+            document.getElementById("fillAnswerBox").style.display = "block";
+            document.getElementById("fillAnswerContent").textContent = question.a;
+        } else {
+            document.getElementById("fillAnswerBox").style.display = "none";
+        }
         
     } else {
         document.getElementById("questionType").textContent = "解答题";
         document.getElementById("fillSection").style.display = "none";
         document.getElementById("essaySection").style.display = "block";
         
-        // 更新答案内容
+        // 更新解答题答案内容
         if (showAnswerMode) {
-            document.getElementById("answerContent").textContent = question.a;
-            document.getElementById("answerBtnText").textContent = "隐藏答案";
+            document.getElementById("essayAnswerContent").textContent = question.a;
         } else {
-            document.getElementById("answerContent").textContent = "点击【查看答案】按钮显示参考答案";
-            document.getElementById("answerBtnText").textContent = "查看答案";
+            document.getElementById("essayAnswerContent").textContent = "点击【提交对答案】按钮显示参考答案";
         }
-        
-        // 解答题禁用提示按钮
-        document.getElementById("hintBtn").disabled = true;
-        document.getElementById("hintBtnText").textContent = "无提示";
     }
     
     // 处理图片显示
@@ -724,9 +722,22 @@ function loadQuestion() {
         imageContainer.innerHTML = '<div class="image-placeholder">[题目包含示意图，请参考教材或课件]</div>';
     }
     
+    // 更新底部按钮文本
+    updateFooterButton();
+    
     // 更新导航按钮状态
     updateNavButtons();
     updateProgress();
+}
+
+// ===== 更新底部按钮文本 =====
+function updateFooterButton() {
+    const answerBtn = document.getElementById("answerBtn");
+    if (showAnswerMode) {
+        answerBtn.textContent = "隐藏答案";
+    } else {
+        answerBtn.textContent = "提交对答案";
+    }
 }
 
 // ===== 更新导航按钮状态 =====
@@ -771,14 +782,16 @@ function submitAnswer() {
         hintBox.innerHTML = "<strong>✓ 回答正确！</strong>";
         hintBox.className = "hint-box correct";
         
-        // 1秒后自动下一题
-        setTimeout(() => {
-            nextQuestion();
-        }, 1000);
+        // 显示答案
+        showAnswerMode = true;
+        loadQuestion();
     } else {
-        hintBox.innerHTML = `<div style="margin-bottom: 8px;"><strong>✗ 答案不正确</strong></div>
-                           <div><strong>正确答案：</strong> ${correctAnswer}</div>`;
+        hintBox.innerHTML = `<div style="margin-bottom: 8px;"><strong>✗ 答案不正确</strong></div>`;
         hintBox.className = "hint-box incorrect";
+        
+        // 显示正确答案提示
+        showAnswerMode = true;
+        loadQuestion();
     }
     
     hintBox.style.display = "block";
@@ -820,32 +833,10 @@ function compareAnswers(userAnswer, correctAnswer) {
     return true;
 }
 
-// ===== 显示提示 =====
-function showHint() {
-    const question = questionBank[currentChapter][currentQuestionIndex];
-    if (question.type !== "fill" || !question.hint) return;
-    
-    const hintBox = document.getElementById("hintBox");
-    hintBox.innerHTML = `<div><strong>💡 提示：</strong>${question.hint}</div>`;
-    hintBox.className = "hint-box";
-    hintBox.style.display = "block";
-}
-
 // ===== 切换答案模式 =====
 function toggleAnswerMode() {
-    const question = questionBank[currentChapter][currentQuestionIndex];
-    
-    if (question.type === "fill") {
-        // 填空题：直接显示答案
-        const hintBox = document.getElementById("hintBox");
-        hintBox.innerHTML = `<div><strong>正确答案：</strong> ${question.a}</div>`;
-        hintBox.className = "hint-box";
-        hintBox.style.display = "block";
-    } else {
-        // 解答题：切换显示/隐藏
-        showAnswerMode = !showAnswerMode;
-        loadQuestion();
-    }
+    showAnswerMode = !showAnswerMode;
+    loadQuestion();
 }
 
 // ===== 题目导航 =====
@@ -919,8 +910,6 @@ document.addEventListener('DOMContentLoaded', initialize);
 
 // 键盘快捷键
 document.addEventListener('keydown', function(e) {
-    const question = questionBank[currentChapter][currentQuestionIndex];
-    
     switch(e.key) {
         case 'ArrowLeft':
             prevQuestion();
@@ -929,18 +918,12 @@ document.addEventListener('keydown', function(e) {
             nextQuestion();
             break;
         case 'Enter':
+            const question = questionBank[currentChapter][currentQuestionIndex];
             if (question.type === "fill" && document.activeElement.id === "userAnswer") {
                 submitAnswer();
             }
             break;
-        case 'h':
-        case 'H':
-            if (question.type === "fill" && question.hint) {
-                showHint();
-            }
-            break;
-        case 'a':
-        case 'A':
+        case ' ':
             toggleAnswerMode();
             break;
     }
