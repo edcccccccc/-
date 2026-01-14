@@ -103,7 +103,7 @@ body {
 
 <body>
 
-<div class="header">刷试卷</div>
+<div class="header">传感器习题集</div>
 
 <div class="chapter-bar" id="chapters"></div>
 
@@ -115,40 +115,161 @@ body {
 </div>
 
 <div class="footer">
-    <button onclick="nextQuestion()">上一题</button>
+    <button onclick="prevQuestion()">上一题</button>
     <button onclick="showAnswer()">提交对答案</button>
     <button onclick="nextQuestion()">下一题</button>
 </div>
 
 <script>
-// ===== 章节题库（来自你文档的真实题目样本）=====
+// ===== 题库（从文档中提取）=====
 const questionBank = {
     "第1章 概述": [
         {
             q: "什么是传感器？",
-            a: "能够感受被测量并按照一定规律转换成可用输出信号的器件和装置。"
+            a: "能够感受规定的被测量并按照一定规律转换成可用输出信号的器件和装置。"
         },
         {
             q: "传感器由哪几部分组成？",
-            a: "由敏感元件、转换元件和基本电路组成。"
+            a: "由敏感元件、转换元件、基本电路组成。"
+        },
+        {
+            q: "简述传感器主要发展趋势。",
+            a: "现代传感器正朝着集成化、网络化、数字化、多功能化、微型化、智能化光机电一体化方向发展，具有高精度、高性能、高灵敏度、高可靠性、高稳定性、长寿命、高信噪比、宽量程、无维护的特点。"
+        },
+        {
+            q: "空调和电冰箱中采用了哪些传感器？它们分别起到什么作用？",
+            a: "空调：温度传感器检测温度控制压缩机；红外传感器接收遥控信号。电冰箱：温度传感器监测温度控制压缩机和除霜。"
         }
     ],
     "第2章 传感器的基本特性": [
         {
-            q: "什么是传感器的静态特性？",
-            a: "当输入量为常数或变化极慢时，传感器的输入输出特性。"
+            q: "传感器的静态特性是什么？由哪些性能指标描述？",
+            a: "静特性是当输入量为常数或变化极慢时，传感器的输入输出特性。主要指标有线性度、迟滞、重复性、分辨力、稳定性、温度稳定性、各种抗干扰稳定性。"
+        },
+        {
+            q: "传感器的线性度是如何确定的？确定拟合直线有哪些方法？",
+            a: "实际传感器有非线性存在，线性度是将近似后的拟合直线与实际曲线进行比较的最大偏差。方法有：理论线性度、端基线性度、独立线性度、最小二乘法线性度。"
+        },
+        {
+            q: "传感器的标定与校准有什么不同？",
+            a: "标定是通过实验确定传感器测量量和真实值之间的关系；校准是通过已知标准量对传感器进行调整使其输出更准确。"
         }
     ],
     "第3章 电阻应变式传感器": [
         {
-            q: "什么是电阻应变效应？",
-            a: "导体在受力或压力作用下发生形变，其电阻值发生变化的现象。"
+            q: "何为电阻应变效应？",
+            a: "导体在受到拉力或压力的外界力作用时，会产生机械变形，同时机械变形会引起导体阻值的变化，这种导体材料因变形而使其电阻值发生变化的现象称为电阻应变效应。"
+        },
+        {
+            q: "金属应变片与半导体应变片在工作原理上有何不同？",
+            a: "金属应变片利用机械形变产生的应变效应；半导体应变片主要利用半导体材料的压阻效应。半导体灵敏系数约为50～100，金属约为2。"
+        }
+    ],
+    "第4章 电容式传感器": [
+        {
+            q: "如何改善单极式变极距型电容传感器的非线性？",
+            a: "采用差动结构，限制相对位移大小，限制初始极距，可提高灵敏度和改善非线性。"
+        },
+        {
+            q: "为什么高频工作时的电容式传感器连接电缆的长度不能任意变化？",
+            a: "高频时容抗减小，电缆等效电感和电阻不可忽略，可能引起谐振，影响传感器正常工作。"
+        }
+    ],
+    "第5章 电感式传感器": [
+        {
+            q: "何谓电感式传感器？电感式传感器分为哪几类？",
+            a: "电感式传感器是利用线圈自感和互感的变化实现非电量电测的装置。种类：自感式、涡流式、差动式、变压式等。"
+        },
+        {
+            q: "提高电感式传感器线性度有哪些有效的方法？",
+            a: "采用差动形式，转换电路采用相敏检波电路可有效改善线性度。"
+        },
+        {
+            q: "什么叫电涡流效应？",
+            a: "块状金属导体置于变化的磁场中或在磁场中作用切割磁力线运动时，导体内部会产生一圈圈闭和的电流，这种电流叫电涡流，这种现象叫做电涡流效应。"
+        }
+    ],
+    "第6章 磁电式传感器": [
+        {
+            q: "试述磁电感应式传感器的工作原理和结构形式。",
+            a: "工作原理基于电磁感应定律，当导体在磁场中运动切割磁力线或线圈中的磁通发生变化时，会产生感应电动势。结构形式主要有动圈式和动铁式。"
+        },
+        {
+            q: "什么是霍尔效应？",
+            a: "通电的导体（半导体）放在磁场中，电流与磁场垂直，在导体另外两侧会产生感应电动势，这种现象称霍尔效应。"
+        }
+    ],
+    "第7章 压电式传感器": [
+        {
+            q: "什么是压电效应？什么是正压电效应和逆压电效应？",
+            a: "电介质在受到外力作用变形时，内部产生电极化现象产生电荷的现象称为压电效应。正压电效应：外力产生电荷；逆压电效应：电场产生机械变形。"
+        },
+        {
+            q: "为什么压电器件一定要高阻抗输出？",
+            a: "为了匹配高阻抗负载，提高信号传输效率，防止电荷泄漏导致信号失真。"
+        }
+    ],
+    "第8章 光电效应及器件": [
+        {
+            q: "什么是内光电效应？什么是外光电效应？",
+            a: "内光电效应：光线照在物体上使电导率变化或产生光生电动势，包括光电导效应和光生伏特效应。外光电效应：在光线作用下，物体内的电子逸出物体表面向外发射。"
+        },
+        {
+            q: "什么是光敏电阻的亮电阻和暗电阻？",
+            a: "暗电阻：无光照时的电阻，一般为0.5～200MΩ；亮电阻：受光照时的电阻，一般为0.5～20KΩ。"
+        }
+    ],
+    "第9章 新型光电传感器": [
+        {
+            q: "CCD主要由哪两部分组成？",
+            a: "MOS光敏元阵列、读出移位寄存器。"
+        },
+        {
+            q: "光纤传感器有哪两大类型？",
+            a: "传光型，功能型。"
+        }
+    ],
+    "第10章 半导体式化学传感器": [
+        {
+            q: "什么是半导体气体传感器？",
+            a: "利用半导体材料与气体接触时电阻或功函数变化的原理制成的气体检测传感器。"
+        }
+    ],
+    "第12章 热电式传感器": [
+        {
+            q: "什么是热电效应？",
+            a: "两种不同类型的金属导体两端分别接在一起构成闭合回路，当两个结点有温差时，导体回路里会产生热电势的现象。"
+        },
+        {
+            q: "试比较热电偶、热电阻、热敏电阻三种热电式传感器的特点。",
+            a: "热电偶：可测上千度高温，精度高；热电阻：结构简单，用于-200～+850℃；热敏电阻：半导体材料制成，用途广泛，多用于家用电器。"
+        }
+    ],
+    "第14章 生物传感器": [
+        {
+            q: "常见生物传感器有哪些？",
+            a: "酶传感器、微生物传感器、细胞传感器、免疫传感器、组织传感器。"
+        }
+    ],
+    "第15章 集成智能传感器": [
+        {
+            q: "什么是智能传感器？",
+            a: "智能传感器是集成传感器、微处理器、通信模块及软件算法的系统级产品，具备信息采集、处理、交换和存储能力。"
+        },
+        {
+            q: "集成智能传感器的主要特点是什么？",
+            a: "集成度高，体积小，将敏感元件、信号调理电路及微处理器集成在同一芯片上。"
+        },
+        {
+            q: "为什么集成智能传感器是现代传感器技术的主要发展趋势？",
+            a: "技术融合推动智能化、微型化发展；应用需求对精度可靠性要求提高；集成化设计降低成本；微机械加工和集成电路工艺的进步使其成为可能。"
         }
     ]
 };
 
 let currentChapter = "第1章 概述";
 let currentList = questionBank[currentChapter];
+let currentIndex = 0;
 let currentAnswer = "";
 
 // ===== 初始化章节按钮 =====
@@ -164,35 +285,57 @@ Object.keys(questionBank).forEach((ch, idx) => {
 function switchChapter(chapter, btn) {
     currentChapter = chapter;
     currentList = questionBank[chapter];
+    currentIndex = 0;
     document.querySelectorAll(".chapter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    nextQuestion();
+    showQuestion(currentIndex);
 }
 
-// ===== 出题 =====
-function nextQuestion() {
+// ===== 显示题目 =====
+function showQuestion(index) {
     document.getElementById("answer").style.display = "none";
     document.getElementById("options").innerHTML = "";
-
-    const item = currentList[Math.floor(Math.random() * currentList.length)];
-    document.getElementById("type").innerText = "单选题";
+    
+    if (currentList.length === 0) {
+        document.getElementById("question").innerText = "本章暂无题目";
+        return;
+    }
+    
+    if (index < 0) index = currentList.length - 1;
+    if (index >= currentList.length) index = 0;
+    currentIndex = index;
+    
+    const item = currentList[currentIndex];
+    document.getElementById("type").innerText = "简答题";
     document.getElementById("question").innerText = item.q;
-
-    const options = shuffle([
-        item.a,
-        "闭环控制系统",
-        "既是开环又是闭环",
-        "以上都不对"
-    ]);
-
+    
+    // 为简答题生成三个干扰选项
+    const allAnswers = getAllAnswers();
+    const otherAnswers = allAnswers.filter(a => a !== item.a);
+    const shuffledOthers = shuffle(otherAnswers).slice(0, 3);
+    const options = shuffle([item.a, ...shuffledOthers]);
+    
     options.forEach(o => {
         const div = document.createElement("div");
         div.className = "option";
         div.innerText = o;
         document.getElementById("options").appendChild(div);
     });
-
+    
     currentAnswer = "正确答案：" + item.a;
+}
+
+// 获取所有题库中的答案用于生成干扰选项
+function getAllAnswers() {
+    const answers = [];
+    Object.values(questionBank).forEach(chapter => {
+        chapter.forEach(item => {
+            if (!answers.includes(item.a)) {
+                answers.push(item.a);
+            }
+        });
+    });
+    return answers;
 }
 
 function showAnswer() {
@@ -201,12 +344,20 @@ function showAnswer() {
     a.style.display = "block";
 }
 
+function prevQuestion() {
+    showQuestion(currentIndex - 1);
+}
+
+function nextQuestion() {
+    showQuestion(currentIndex + 1);
+}
+
 function shuffle(arr) {
     return arr.sort(() => Math.random() - 0.5);
 }
 
-nextQuestion();
+// 初始化显示第一题
+showQuestion(0);
 </script>
-
 </body>
 </html>
