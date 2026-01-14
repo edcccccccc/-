@@ -147,46 +147,110 @@ body {
 
 /* 高亮样式 */
 .highlight {
-    background: linear-gradient(120deg, #ffeb3b 0%, #ffeb3b 100%);
-    background-repeat: no-repeat;
-    background-size: 100% 40%;
-    background-position: 0 90%;
-    padding: 2px 4px;
-    border-radius: 3px;
     font-weight: bold;
-    color: #333;
+    color: #d32f2f;
 }
 
 .highlight-important {
-    background: linear-gradient(120deg, #ff9800 0%, #ff9800 100%);
-    background-repeat: no-repeat;
-    background-size: 100% 40%;
-    background-position: 0 90%;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-weight: bold;
-    color: #333;
+    font-weight: 900;
+    color: #1976d2;
+    font-size: 105%;
 }
 
 .highlight-number {
-    background: linear-gradient(120deg, #4caf50 0%, #4caf50 100%);
-    background-repeat: no-repeat;
-    background-size: 100% 40%;
-    background-position: 0 90%;
-    padding: 2px 6px;
-    border-radius: 3px;
     font-weight: bold;
-    color: white;
-    margin: 0 2px;
+    color: #388e3c;
+    font-family: 'Courier New', monospace;
 }
 
 .highlight-formula {
-    background: #e8f5e8;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border-left: 3px solid #4caf50;
+    font-weight: bold;
     font-family: 'Courier New', monospace;
-    margin: 2px 0;
+    color: #7b1fa2;
+}
+
+/* 选择题选项样式 */
+.options-container {
+    margin: 20px 0;
+}
+
+.option-item {
+    padding: 14px 16px;
+    margin: 10px 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.option-item:hover {
+    border-color: #1976d2;
+    background: #f0f7ff;
+}
+
+.option-item.selected {
+    border-color: #4caf50;
+    background: #e8f5e9;
+    font-weight: bold;
+}
+
+.option-item.correct {
+    border-color: #4caf50;
+    background: #e8f5e9;
+}
+
+.option-item.incorrect {
+    border-color: #f44336;
+    background: #ffebee;
+}
+
+.option-mark {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background: #e0e0e0;
+    border-radius: 50%;
+    margin-right: 12px;
+    font-weight: bold;
+    color: #666;
+}
+
+.option-item.selected .option-mark {
+    background: #4caf50;
+    color: white;
+}
+
+/* 多选题特殊样式 */
+.multi-select-hint {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin: 10px 0;
+    font-style: italic;
+}
+
+/* 填空题输入区域 */
+.fill-input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-family: "Microsoft YaHei", sans-serif;
+    background: #fafafa;
+    margin: 15px 0;
+}
+
+.fill-input:focus {
+    border-color: #1976d2;
+    outline: none;
+    background: #fff;
 }
 
 /* 解答题答案区域 */
@@ -215,6 +279,36 @@ body {
     font-style: italic;
     text-align: center;
     padding: 20px;
+}
+
+/* 结果提示框 */
+.result-box {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.result-box.correct {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    color: #2e7d32;
+}
+
+.result-box.incorrect {
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    color: #c62828;
+}
+
+.result-box.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* 图片显示 */
@@ -293,11 +387,11 @@ body {
     </div>
     <div class="stat-item">
         <div class="stat-label">题目进度</div>
-        <div class="stat-value" id="progressText">1/33</div>
+        <div class="stat-value" id="progressText">1/45</div>
     </div>
     <div class="stat-item">
         <div class="stat-label">已掌握</div>
-        <div class="stat-value" id="masteredText">0/33</div>
+        <div class="stat-value" id="masteredText">0/45</div>
     </div>
 </div>
 
@@ -305,14 +399,31 @@ body {
 
 <div class="card">
     <div class="question-header">
-        <span class="type">解答题</span>
+        <span class="type" id="questionType">单选题</span>
         <span class="question-number" id="questionNumber">第1题</span>
     </div>
     
     <div class="question" id="questionText"></div>
     
-    <!-- 解答题部分 -->
-    <div class="answer-section">
+    <!-- 选择题选项区域 -->
+    <div class="options-container" id="optionsContainer"></div>
+    
+    <!-- 填空题输入区域 -->
+    <div id="fillContainer" style="display: none;">
+        <input type="text" class="fill-input" id="fillAnswer" 
+               placeholder="请输入答案（多个答案用逗号、顿号或空格分隔）">
+    </div>
+    
+    <!-- 多选题提示 -->
+    <div class="multi-select-hint" id="multiSelectHint" style="display: none;">
+        注：本题为多选题，可选择多个答案
+    </div>
+    
+    <!-- 结果提示框 -->
+    <div class="result-box" id="resultBox"></div>
+    
+    <!-- 解答题答案区域 -->
+    <div class="answer-section" id="answerSection">
         <div class="answer-box" id="answerBox">
             <div class="answer-content" id="answerContent"></div>
         </div>
@@ -324,458 +435,30 @@ body {
 
 <div class="footer">
     <button class="footer-btn" onclick="prevQuestion()" id="prevBtn">上一题</button>
-    <button class="footer-btn" onclick="toggleAnswerMode()" id="answerBtn">提交对答案</button>
+    <button class="footer-btn" onclick="submitAnswer()" id="submitBtn">提交答案</button>
     <button class="footer-btn" onclick="nextQuestion()" id="nextBtn">下一题</button>
 </div>
 
 <script>
-// ===== 题库数据（全部为解答题）=====
+// ===== 题库数据 =====
 const questionBank = {
     "第1章 概述": [
         {
+            type: "essay",
             q: "1.1 什么是传感器？",
             a: "传感器是能够感受<span class='highlight-important'>规定的被测量</span>并按照<span class='highlight-important'>一定规律</span>转换成<span class='highlight-important'>可用输出信号</span>的器件和装置。这是根据我国国家标准<span class='highlight'>GB7665-87</span>的定义。"
         },
         {
+            type: "essay",
             q: "1.2 传感器由哪几部分组成？",
             a: "传感器主要由三部分组成：\n1. <span class='highlight-important'>敏感元件</span>：直接感受被测量并输出与被测量有确定关系的物理量；\n2. <span class='highlight-important'>转换元件</span>：将敏感元件输出的物理量转换为电信号；\n3. <span class='highlight-important'>基本电路</span>：对电信号进行放大、处理等操作。"
         },
         {
+            type: "essay",
             q: "1.3 简述传感器主要发展趋势。",
             a: "现代传感器正朝着<span class='highlight'>集成化</span>、<span class='highlight'>网络化</span>、<span class='highlight'>数字化</span>、<span class='highlight'>多功能化</span>、<span class='highlight'>微型化</span>、<span class='highlight'>智能化</span>光机电一体化方向发展，具有<span class='highlight'>高精度</span>、<span class='highlight'>高性能</span>、<span class='highlight'>高灵敏度</span>、<span class='highlight'>高可靠性</span>、<span class='highlight'>高稳定性</span>、<span class='highlight'>长寿命</span>、<span class='highlight'>高信噪比</span>、<span class='highlight'>宽量程</span>、<span class='highlight'>无维护</span>的特点。"
         },
         {
+            type: "essay",
             q: "1.8 空调和电冰箱中采用了哪些传感器？它们分别起到什么作用？",
-            a: "<span class='highlight-important'>空调传感器：</span>\n1. <span class='highlight'>温度传感器</span>：检测室内/室外环境温度、蒸发器温度等，控制<span class='highlight-important'>压缩机启停</span>和<span class='highlight-important'>风机速度</span>。\n2. <span class='highlight'>红外传感器</span>：接收<span class='highlight-important'>遥控信号</span>。\n\n<span class='highlight-important'>电冰箱传感器：</span>\n<span class='highlight'>温度传感器</span>：监测冷藏/冷冻室温度，控制<span class='highlight-important'>压缩机启停</span>和<span class='highlight-important'>除霜</span>。"
-        }
-    ],
-    "第2章 传感器的基本特性": [
-        {
-            q: "2.1 传感器的静态特性是什么？由哪些性能指标描述？",
-            a: "传感器的<span class='highlight-important'>静态特性</span>是指当输入量为<span class='highlight'>常数或变化极慢</span>时，传感器的输入输出特性。\n\n主要性能指标：\n1. <span class='highlight'>线性度</span>\n2. <span class='highlight'>迟滞</span>\n3. <span class='highlight'>重复性</span>\n4. <span class='highlight'>分辨力</span>\n5. <span class='highlight'>稳定性</span>\n6. <span class='highlight'>温度稳定性</span>\n7. <span class='highlight'>各种抗干扰稳定性</span>"
-        },
-        {
-            q: "2.2 传感器的线性度是如何确定的？确定拟合直线有哪些方法？传感器的线性度表征了什么含义？",
-            a: "1. <span class='highlight-important'>线性度的确定</span>：实际传感器有非线性存在，线性度是将近似后的<span class='highlight'>拟合直线</span>与实际曲线进行比较，其中存在的<span class='highlight-important'>最大偏差</span>称为传感器的<span class='highlight-important'>非线性误差</span>，即线性度。\n\n2. <span class='highlight-important'>拟合直线的方法</span>：\n   - <span class='highlight'>理论线性度（理论拟合）</span>\n   - <span class='highlight'>端基线性度（端点连线拟合）</span>\n   - <span class='highlight'>独立线性度（端点平移拟合）</span>\n   - <span class='highlight'>最小二乘法线性度</span>\n\n3. <span class='highlight-important'>线性度的含义</span>：表征<span class='highlight'>实际特性</span>与<span class='highlight'>拟合直线</span>不吻合的参数。"
-        },
-        {
-            q: "2.10 传感器的标定与校准有什么不同？",
-            a: "1. <span class='highlight-important'>标定</span>：通过实验或计算确定传感器的<span class='highlight'>测量量</span>和<span class='highlight'>真实值</span>之间的关系，建立<span class='highlight'>输出量</span>与<span class='highlight'>输入量</span>的对应关系，适用于较高精度的仪器，通常在使用前进行。\n\n2. <span class='highlight-important'>校准</span>：在使用前或使用过程中，通过已知的<span class='highlight'>标准量</span>对传感器进行调整，使其输出更加准确。属于强制性检定之外的测量装置。\n\n<span class='highlight-important'>主要区别</span>：标定是<span class='highlight'>建立关系</span>，校准是<span class='highlight'>调整准确性</span>。"
-        }
-    ],
-    "第3章 电阻应变式传感器": [
-        {
-            q: "3.1 何为电阻应变效应？怎样利用这种效应制成应变片？",
-            a: "1. <span class='highlight-important'>电阻应变效应</span>：导体在受到<span class='highlight'>拉力或压力</span>的外界力作用时，会产生<span class='highlight'>机械变形</span>，同时机械变形会引起导体<span class='highlight'>阻值的变化</span>，这种导体材料因变形而使其电阻值发生变化的现象称为电阻应变效应。\n\n2. <span class='highlight-important'>制成应变片</span>：当外力作用时，导体的<span class='highlight'>电阻率</span>、<span class='highlight'>长度</span>、<span class='highlight'>截面积</span>都会发生变化，从而引起电阻值的变化。通过<span class='highlight-important'>测量电阻值的变化</span>，检测出外界作用力的大小。"
-        },
-        {
-            q: "3.4 金属应变片与半导体应变片在工作原理上有何不同？半导体应变片灵敏系数范围是多少，金属应变片灵敏系数范围是多少？",
-            a: "1. <span class='highlight-important'>工作原理不同</span>：\n   - <span class='highlight'>金属应变片</span>：利用<span class='highlight-important'>机械形变产生的应变效应</span>\n   - <span class='highlight'>半导体应变片</span>：主要利用<span class='highlight-important'>半导体材料的压阻效应</span>\n\n2. <span class='highlight-important'>灵敏系数</span>：\n   - <span class='highlight'>金属应变片</span>：灵敏系数约为<span class='highlight-number'>2</span>（<span class='highlight-formula'>K≈1+2μ</span>）\n   - <span class='highlight'>半导体应变片</span>：灵敏系数约为<span class='highlight-number'>50～100</span>（<span class='highlight-formula'>K≈πE</span>）\n\n半导体应变片的<span class='highlight-important'>灵敏度</span>远高于金属应变片。"
-        },
-        {
-            q: "3.5 一应变片的电阻R=120Ω，灵敏系数k=2.05，用作应变为800μm/m的传感元件。求：①ΔR和ΔR/R；②若电源电压U=3V，初始平衡时电桥的输出电压U₀。",
-            a: "<span class='highlight-important'>计算过程：</span>\n① <span class='highlight'>ΔR = R × k × ε</span> \n   = <span class='highlight-number'>120Ω</span> × <span class='highlight-number'>2.05</span> × (<span class='highlight-number'>800×10⁻⁶</span>) \n   = <span class='highlight-number'>0.1968Ω</span>\n\n<span class='highlight'>ΔR/R = k × ε</span> \n      = <span class='highlight-number'>2.05</span> × (<span class='highlight-number'>800×10⁻⁶</span>) \n      = <span class='highlight-number'>0.00164</span>\n\n② <span class='highlight'>U₀ = (U/4) × (ΔR/R)</span> \n     = (<span class='highlight-number'>3/4</span>) × <span class='highlight-number'>0.00164</span> \n     = <span class='highlight-number'>0.00123V</span> \n     = <span class='highlight-number'>1.23mV</span>"
-        },
-        {
-            q: "3.7 下图为一直流电桥，试求输出电压。",
-            a: "① 当<span class='highlight'>R1为金属应变片，ΔR1=1.2Ω</span>时：\n   <span class='highlight'>U₀ = (E/4) × (ΔR1/R1)</span> \n      = (<span class='highlight-number'>4/4</span>) × (<span class='highlight-number'>1.2/120</span>) \n      = <span class='highlight-number'>0.01V</span>\n\n② 当<span class='highlight'>R1,R2为金属应变片，感应应变大小，极性相同</span>时：\n   <span class='highlight'>U₀ = 0V</span>（因为两个应变片同时变化，电桥平衡）\n\n③ 当<span class='highlight'>R1,R2为金属应变片，感应应变大小不同，极性相反，且ΔR1=ΔR2=1.2Ω</span>时：\n   <span class='highlight'>U₀ = (E/2) × (ΔR1/R1)</span> \n      = (<span class='highlight-number'>4/2</span>) × (<span class='highlight-number'>1.2/120</span>) \n      = <span class='highlight-number'>0.02V</span>",
-            image: true
-        }
-    ],
-    "第4章 电容式传感器": [
-        {
-            q: "4.1 如何改善单极式变极距型电容传感器的非线性？",
-            a: "<span class='highlight-important'>改善方法：</span>\n1. <span class='highlight'>限制相对位移大小</span>：非线性随相对位移的增加而增加，为保证线性度应限制相对位移的大小，即<span class='highlight-important'>限制量程大小</span>。\n2. <span class='highlight'>限制初始极距</span>：起始极距与灵敏度、线性度相矛盾，所以变极距式电容传感器只适合<span class='highlight-important'>小位移测量</span>。\n3. <span class='highlight'>采用差动结构</span>：为提高传感器的<span class='highlight-important'>灵敏度</span>和改善<span class='highlight-important'>非线性关系</span>，变极距式电容传感器一般采用<span class='highlight-important'>差动结构</span>。"
-        },
-        {
-            q: "4.2 为什么高频工作时的电容式传感器连接电缆的长度不能任意变化？",
-            a: "<span class='highlight-important'>原因：</span>\n1. 低频时<span class='highlight'>容抗较大</span>，传输线的等效电感和电阻可忽略。\n2. 高频时<span class='highlight'>容抗减小</span>，等效电感和电阻不可忽略，这时接在传感器输出端相当于一个<span class='highlight'>串联谐振</span>。\n3. 有一个<span class='highlight'>谐振频率</span>存在，当工作频率接近谐振频率时，串联谐振阻抗最小，电流最大，谐振对传感器的输出起<span class='highlight-important'>破坏作用</span>，使电路不能正常工作。\n4. 通常工作频率<span class='highlight-number'>10MHz</span>以上就要考虑电缆线等效电感的影响。"
-        },
-        {
-            q: "4.3 电容式传感器测量液位的原理？画出示意图，写出原理与过程。",
-            a: "<span class='highlight-important'>原理：</span>电容式液位传感器是利用<span class='highlight'>液体与空气的介电常数不同</span>，通过测量<span class='highlight'>电容值的变化</span>来推算液位高度。\n\n<span class='highlight-important'>过程：</span>\n1. 在液位测量中，传感器是<span class='highlight'>同轴圆柱形电容器</span>，一根金属棒作为<span class='highlight'>内电极</span>，容器壁或另一根金属管作为<span class='highlight'>外电极</span>。\n2. 当液位变化时，改变了<span class='highlight'>两种介质（液体和空气）</span>在电极间的分布比例。\n3. 由于液体的介电常数较大，液位升高时，整体电容<span class='highlight-important'>增大</span>；液位降低时，整体电容<span class='highlight-important'>减小</span>。\n4. 通过测量<span class='highlight'>电容值的变化</span>即可确定液位高度。",
-            image: true
-        }
-    ],
-    "第5章 电感式传感器": [
-        {
-            q: "5.1 何谓电感式传感器？电感式传感器分为哪几类？",
-            a: "<span class='highlight-important'>电感式传感器定义：</span>是一种<span class='highlight'>机-电转换装置</span>，利用线圈<span class='highlight'>自感和互感</span>的变化实现非电量电测的装置，利用<span class='highlight'>电磁感应定律</span>将被测非电量转换为电感或互感的变化。\n\n<span class='highlight-important'>分类：</span>\n1. <span class='highlight'>自感式传感器</span>\n2. <span class='highlight'>涡流式传感器</span>\n3. <span class='highlight'>差动式传感器</span>\n4. <span class='highlight'>变压式传感器</span>"
-        },
-        {
-            q: "5.2 提高电感式传感器线性度有哪些有效的方法。",
-            a: "<span class='highlight-important'>有效方法：</span>\n1. <span class='highlight'>采用差动形式</span>：可以消除偶次谐波，提高线性度。\n2. <span class='highlight'>转换电路采用相敏检波电路</span>：可以鉴别位移方向，改善线性度。\n3. <span class='highlight'>合理选择工作点</span>：使传感器工作在近似线性区。\n4. <span class='highlight'>采用适当的磁路设计</span>：减少漏磁，提高线性度。"
-        },
-        {
-            q: "5.10 什么叫电涡流效应？说明电涡流式传感器的基本结构与工作原理。电涡流式传感器的基本特性有哪些？它是基于何种模型得到的？",
-            a: "1. <span class='highlight-important'>电涡流效应</span>：块状金属导体置于变化的磁场中或在磁场中作用切割磁力线运动时，导体内部会产生一圈圈闭和的电流，这种电流叫<span class='highlight'>电涡流</span>，这种现象叫做电涡流效应。\n\n2. <span class='highlight-important'>基本结构与工作原理</span>：\n   - 结构：主要由<span class='highlight'>线圈</span>、框架和屏蔽罩组成。\n   - 工作原理：线圈通以高频电流产生<span class='highlight'>交变磁场</span>，当金属导体靠近时产生涡流，涡流产生<span class='highlight'>反磁场</span>使线圈阻抗变化，通过检测<span class='highlight'>阻抗变化</span>进行测量。\n\n3. <span class='highlight-important'>基本特性</span>：\n   - <span class='highlight'>趋肤效应</span>：电涡流只存在于金属导体表面薄层内\n   - 检测范围有限，与线圈直径有关\n   - 涡流分布不均匀，存在径向和轴向分布\n\n4. <span class='highlight-important'>模型</span>：基于<span class='highlight'>电磁场理论</span>和<span class='highlight'>麦克斯韦方程组</span>建立的模型。"
-        }
-    ],
-    "第6章 磁电式传感器": [
-        {
-            q: "6.1 试述磁电感应式传感器的工作原理和结构形式。",
-            a: "<span class='highlight-important'>工作原理：</span>基于<span class='highlight'>电磁感应定律</span>，当导体在磁场中运动切割磁力线或线圈中的磁通发生变化时，导体或线圈中会产生<span class='highlight'>感应电动势</span>。\n\n<span class='highlight-important'>结构形式：</span>\n1. <span class='highlight'>动圈式</span>：线圈在磁场中运动，产生感应电动势。\n2. <span class='highlight'>动铁式</span>：磁铁在线圈中运动，改变磁通量。\n3. <span class='highlight'>变磁阻式</span>：通过改变磁路的磁阻来改变磁通量。"
-        },
-        {
-            q: "6.4 什么是霍尔效应？",
-            a: "<span class='highlight-important'>霍尔效应：</span>\n1. 定义：通电的导体（半导体）放在磁场中，<span class='highlight'>电流与磁场垂直</span>，在导体另外两侧会产生<span class='highlight'>感应电动势</span>，这种现象称霍尔效应。\n2. 条件：需要同时存在<span class='highlight'>电流</span>和<span class='highlight'>磁场</span>，且两者方向<span class='highlight'>垂直</span>。\n3. 应用：利用霍尔效应可以测量磁场、电流、位移等物理量。"
-        },
-        {
-            q: "6.10 列举1～2个霍尔元件的应用例子。",
-            a: "<span class='highlight-important'>应用例子：</span>\n1. <span class='highlight'>电动汽车的电机控制与安全保护：</span>\n   - 实时监测电机转速、位置\n   - 辅助控制转速与力矩\n   - 提供过流保护\n\n2. <span class='highlight'>无线蓝牙耳机的充电盒：</span>\n   - 监测盖子是否打开\n   - 检测耳机是否在充电盒内\n   - 实现自动休眠与唤醒功能\n\n3. 其他应用：<span class='highlight'>电流传感器</span>、<span class='highlight'>位置传感器</span>、<span class='highlight'>转速测量</span>等。"
-        }
-    ],
-    "第7章 压电式传感器": [
-        {
-            q: "7.1 什么是压电效应？什么是正压电效应和逆压电效应？",
-            a: "<span class='highlight-important'>压电效应：</span>某些电介质在沿一定的方向受到外力的作用变形时，由于内部<span class='highlight'>电极化现象</span>同时在两个表面上产生符号相反的电荷，当外力去掉后，恢复到不带电的状态；而当作用力方向改变时，电荷的极性随着改变。\n\n<span class='highlight-important'>正压电效应（也称压电效应）：</span>\n- 外力作用下产生电荷\n- <span class='highlight'>机械能→电能</span>\n- 应用：压力传感器、加速度计\n\n<span class='highlight-important'>逆压电效应：</span>\n- 电场作用下产生机械变形\n- <span class='highlight'>电能→机械能</span>\n- 应用：超声波发生器、微位移器"
-        },
-        {
-            q: "7.9 为什么压电器件一定要高阻抗输出？",
-            a: "<span class='highlight-important'>原因：</span>\n1. <span class='highlight'>匹配高阻抗负载</span>：压电器件输出的是微弱的电荷信号，需要高阻抗负载才能有效传输。\n2. <span class='highlight'>防止电荷泄漏</span>：如果负载阻抗较低，电荷会迅速泄漏，导致信号失真或测量不准确。\n3. <span class='highlight'>提高信号传输效率</span>：高阻抗输出可以有效减少这种电荷泄漏，保证信号的完整性。\n4. <span class='highlight'>提高测量精度</span>：高阻抗可以减少信号衰减，提高测量精度。"
-        }
-    ],
-    "第8章 光电效应及器件": [
-        {
-            q: "8.1 什么是内光电效应？什么是外光电效应？说明其工作原理并指出相应的典型光电器件。",
-            a: "<span class='highlight-important'>内光电效应：</span>当光线照在物体上，使物体的电导率发生变化，或产生光生电动势的现象叫做内光电效应。\n<span class='highlight'>分为两类：</span>\n1. <span class='highlight'>光电导效应</span>：入射光强改变物质导电率的物理现象。\n   - 典型器件：<span class='highlight-important'>光敏电阻</span>\n\n2. <span class='highlight'>光生伏特效应</span>：光照时物体中能产生一定方向电动势的现象。\n   - 典型器件：<span class='highlight-important'>光电池、光敏晶体管</span>\n\n<span class='highlight-important'>外光电效应：</span>在光线作用下，物体内的电子逸出物体表面向外发射的现象。\n- 典型器件：<span class='highlight-important'>光电管、光电倍增管</span>"
-        },
-        {
-            q: "8.4 什么是光敏电阻的亮电阻和暗电阻？暗电阻电阻值通常在什么范围？",
-            a: "1. <span class='highlight-important'>暗电阻</span>：无光照时的电阻。\n   - 电阻值范围：一般为<span class='highlight-number'>0.5～200MΩ</span>\n   - 特点：阻值很大\n\n2. <span class='highlight-important'>亮电阻</span>：受光照时的电阻。\n   - 电阻值范围：一般为<span class='highlight-number'>0.5～20KΩ</span>\n   - 特点：阻值较小\n\n说明：光照使半导体产生<span class='highlight'>电子-空穴对</span>，电导率增加，电阻减小。光照越强，电阻越小。"
-        },
-        {
-            q: "8.12 举出日常生活中的两个光电式传感器的应用例子，并说明原理。",
-            a: "<span class='highlight-important'>例子1：光控路灯</span>\n- 原理：利用<span class='highlight'>光敏电阻</span>或<span class='highlight'>光敏二极管</span>检测环境光强。\n- 工作：天黑时（光照弱），光敏电阻阻值增大，电路导通，路灯亮；天亮时（光照强），光敏电阻阻值减小，电路断开，路灯灭。\n\n<span class='highlight-important'>例子2：手机自动亮度调节</span>\n- 原理：利用<span class='highlight'>光传感器</span>检测环境光强度。\n- 工作：环境光强时，自动调亮屏幕；环境光暗时，自动调暗屏幕，既保证观看舒适，又节约电量。"
-        }
-    ],
-    "第9章 新型光电传感器": [
-        {
-            q: "9.1 CCD主要由哪两部分组成？",
-            a: "<span class='highlight'>CCD（电荷耦合器件）</span>主要由两部分组成：\n1. <span class='highlight-important'>MOS光敏元阵列</span>：\n   - 用于<span class='highlight'>光电转换</span>\n   - 将光信号转换为<span class='highlight'>电荷信号</span>\n   - 按矩阵排列\n\n2. <span class='highlight-important'>读出移位寄存器</span>：\n   - 用于<span class='highlight'>电荷转移</span>\n   - 将电荷信号顺序读出\n   - 实现信号的<span class='highlight'>串行输出</span>"
-        },
-        {
-            q: "9.8 光纤传感器有哪两大类型？",
-            a: "光纤传感器主要分为两大类型：\n1. <span class='highlight-important'>传光型光纤传感器</span>：\n   - 光纤仅作为<span class='highlight'>传光介质</span>\n   - 敏感元件在光纤外部\n   - 结构相对简单\n\n2. <span class='highlight-important'>功能型光纤传感器</span>：\n   - 光纤本身作为<span class='highlight'>敏感元件</span>\n   - 光纤特性随被测量变化\n   - 灵敏度较高"
-        }
-    ],
-    "第12章 热电式传感器": [
-        {
-            q: "12.1 什么是热电效应？热电偶测温回路的热电动势由哪两部分组成？由同一种导体组成的闭合回路能产生热电势吗？",
-            a: "1. <span class='highlight-important'>热电效应</span>：两种不同类型的金属导体两端分别接在一起构成闭合回路，当两个结点有温差时，导体回路里有电流流动会产生<span class='highlight'>热电势</span>，这种现象称为热电效应。\n\n2. <span class='highlight-important'>热电动势组成</span>：\n   - <span class='highlight'>接触电势</span>：两种不同材料接触处产生的电势\n   - <span class='highlight'>温差电势</span>：同一种材料两端温差产生的电势\n\n3. <span class='highlight-important'>同种导体</span>：热电偶两个电极材料相同时，无论两端点温度如何变化，<span class='highlight-important'>无热电势产生</span>。因为需要两种不同材料才能产生接触电势。"
-        },
-        {
-            q: "12.4 试比较热电偶、热电阻、热敏电阻三种热电式传感器的特点。",
-            a: "<span class='highlight-important'>热电偶：</span>\n- 优点：可测<span class='highlight'>上千度高温</span>，精度高、性能好\n- 缺点：需要<span class='highlight'>冷端补偿</span>，灵敏度较低\n- 应用：高温测量\n\n<span class='highlight-important'>热电阻：</span>\n- 优点：结构简单，稳定性好\n- 缺点：需要电流激励，存在<span class='highlight'>自热效应</span>\n- 应用：<span class='highlight'>-200～+850℃</span>范围，工业测温\n\n<span class='highlight-important'>热敏电阻：</span>\n- 优点：<span class='highlight'>灵敏度高</span>，响应快，体积小\n- 缺点：非线性大，互换性差\n- 应用：家用电器，温度补偿，温度控制"
-        }
-    ],
-    "第14章 生物传感器": [
-        {
-            q: "常见生物传感器有哪些？",
-            a: "常见的生物传感器主要有五类：\n1. <span class='highlight-important'>酶传感器</span>：利用<span class='highlight'>酶的特异性催化作用</span>\n2. <span class='highlight-important'>微生物传感器</span>：利用<span class='highlight'>微生物的代谢功能</span>\n3. <span class='highlight-important'>细胞传感器</span>：利用<span class='highlight'>细胞的生理功能</span>\n4. <span class='highlight-important'>免疫传感器</span>：利用<span class='highlight'>抗原-抗体特异性反应</span>\n5. <span class='highlight-important'>组织传感器</span>：利用<span class='highlight'>生物组织的特性</span>\n\n应用领域：医疗诊断、环境监测、食品检测等。"
-        }
-    ],
-    "第15章 集成智能传感器": [
-        {
-            q: "1. 什么是智能传感器？什么是集成智能传感器？",
-            a: "<span class='highlight-important'>智能传感器：</span>\n- 定义：集成<span class='highlight'>传感器</span>、<span class='highlight'>微处理器</span>、<span class='highlight'>通信模块</span>及软件算法的系统级产品\n- 功能：具备信息采集、处理、交换和存储能力\n- 特点：具有<span class='highlight'>自诊断</span>、<span class='highlight'>自补偿</span>、<span class='highlight'>自适应</span>功能\n\n<span class='highlight-important'>集成智能传感器：</span>\n- 定义：智能传感器的一种实现形式\n- 工艺：采用<span class='highlight'>微机械加工</span>和<span class='highlight'>集成电路工艺</span>\n- 特点：将<span class='highlight'>敏感元件</span>、<span class='highlight'>信号调理电路</span>及<span class='highlight'>微处理器</span>集成在同一芯片上，集成度高，体积小"
-        },
-        {
-            q: "2. 集成智能传感器的主要特点是什么？",
-            a: "集成智能传感器的主要特点：\n1. <span class='highlight'>高精度</span>：采用数字化处理，减少误差\n2. <span class='highlight'>宽量程</span>：可适应不同测量范围\n3. <span class='highlight'>多功能化</span>：一机多用，节约空间\n4. <span class='highlight'>高可靠性</span>：集成化减少连接点\n5. <span class='highlight'>高性价比</span>：批量生产降低成本\n6. <span class='highlight'>自适应能力</span>：自动调整工作状态\n7. <span class='highlight'>微型化</span>：体积小，重量轻\n8. <span class='highlight'>微功耗</span>：低功耗设计，节能"
-        },
-        {
-            q: "3. 为什么集成智能传感器是现代传感器技术的主要发展趋势？",
-            a: "集成智能传感器成为主要发展趋势的原因：\n1. <span class='highlight-important'>技术融合</span>：计算机、微电子与传感技术的结合推动传感器向<span class='highlight'>智能化</span>、<span class='highlight'>微型化</span>发展。\n2. <span class='highlight-important'>应用需求</span>：工业自动化、航空航天、医疗健康等领域对传感器<span class='highlight'>精度</span>、<span class='highlight'>可靠性</span>及<span class='highlight'>多功能化</span>提出更高要求。\n3. <span class='highlight-important'>成本效益</span>：集成化设计降低生产成本，提高性能价格比，适应大规模应用需求。\n4. <span class='highlight-important'>技术突破</span>：微机械加工和集成电路工艺的进步，使集成智能传感器成为可能。\n5. <span class='highlight-important'>核心发展方向</span>：通过技术融合与成本优化，成为现代传感器技术的核心发展方向。"
-        }
-    ]
-};
-
-// ===== 全局变量 =====
-let currentChapter = "第1章 概述";
-let currentQuestionIndex = 0;
-let showAnswerMode = false;
-let masteredQuestions = new Set();
-let stats = {
-    totalQuestions: calculateTotalQuestions()
-};
-
-// ===== 计算总题数 =====
-function calculateTotalQuestions() {
-    let total = 0;
-    Object.values(questionBank).forEach(chapter => {
-        total += chapter.length;
-    });
-    return total;
-}
-
-// ===== 初始化章节导航 =====
-function initializeChapters() {
-    const chapterBar = document.getElementById("chapters");
-    chapterBar.innerHTML = "";
-    
-    const chapters = Object.keys(questionBank);
-    chapters.forEach((chapter) => {
-        const btn = document.createElement("button");
-        btn.className = "chapter-btn";
-        btn.textContent = chapter;
-        btn.title = chapter;
-        btn.onclick = () => switchChapter(chapter);
-        chapterBar.appendChild(btn);
-    });
-    
-    updateChapterBar();
-}
-
-// ===== 更新章节栏高亮 =====
-function updateChapterBar() {
-    document.querySelectorAll(".chapter-btn").forEach(btn => {
-        btn.classList.remove("active");
-        if (btn.textContent === currentChapter) {
-            btn.classList.add("active");
-        }
-    });
-}
-
-// ===== 切换章节 =====
-function switchChapter(chapter) {
-    currentChapter = chapter;
-    currentQuestionIndex = 0;
-    showAnswerMode = false;
-    
-    loadQuestion();
-    updateProgress();
-    updateChapterBar();
-}
-
-// ===== 加载题目 =====
-function loadQuestion() {
-    const chapterQuestions = questionBank[currentChapter];
-    const question = chapterQuestions[currentQuestionIndex];
-    
-    // 更新全局题号
-    const chapters = Object.keys(questionBank);
-    let globalIndex = 0;
-    for (let i = 0; i < chapters.indexOf(currentChapter); i++) {
-        globalIndex += questionBank[chapters[i]].length;
-    }
-    globalIndex += currentQuestionIndex + 1;
-    
-    // 更新题目信息（问题中也要高亮）
-    document.getElementById("questionText").innerHTML = highlightQuestionKeywords(question.q);
-    document.getElementById("currentChapterText").textContent = currentChapter;
-    document.getElementById("progressText").textContent = `${globalIndex}/${stats.totalQuestions}`;
-    document.getElementById("questionNumber").textContent = `第${globalIndex}题`;
-    
-    // 更新答案内容
-    const answerBox = document.getElementById("answerBox");
-    const answerContent = document.getElementById("answerContent");
-    
-    if (showAnswerMode) {
-        answerContent.innerHTML = question.a; // 这里已经包含HTML标签
-        answerBox.style.background = "#f1f8e9";
-        answerBox.style.borderColor = "#4caf50";
-    } else {
-        answerContent.textContent = "点击【提交对答案】按钮查看参考答案";
-        answerBox.style.background = "#f8f9fa";
-        answerBox.style.borderColor = "#e0e0e0";
-    }
-    
-    // 检查是否已掌握
-    const questionKey = `${currentChapter}_${currentQuestionIndex}`;
-    if (masteredQuestions.has(questionKey)) {
-        answerBox.style.borderColor = "#ff9800";
-        answerBox.style.background = "#fff3e0";
-    }
-    
-    // 处理图片显示
-    const imageContainer = document.getElementById("imageContainer");
-    imageContainer.innerHTML = "";
-    if (question.image) {
-        imageContainer.innerHTML = '<div class="image-placeholder">[题目包含示意图，请参考教材或课件]</div>';
-    }
-    
-    // 更新底部按钮文本
-    updateFooterButton();
-    
-    // 更新导航按钮状态
-    updateNavButtons();
-    updateProgress();
-}
-
-// ===== 在问题中高亮关键词 =====
-function highlightQuestionKeywords(questionText) {
-    // 定义需要在问题中高亮的关键词
-    const questionKeywords = [
-        // 技术术语
-        { pattern: /传感器/g, className: 'highlight-important' },
-        { pattern: /效应/g, className: 'highlight' },
-        { pattern: /特性/g, className: 'highlight' },
-        { pattern: /原理/g, className: 'highlight-important' },
-        { pattern: /组成/g, className: 'highlight' },
-        { pattern: /方法/g, className: 'highlight' },
-        { pattern: /分类/g, className: 'highlight' },
-        { pattern: /结构/g, className: 'highlight' },
-        { pattern: /工作/g, className: 'highlight' },
-        { pattern: /测量/g, className: 'highlight' },
-        { pattern: /计算/g, className: 'highlight-important' },
-        { pattern: /比较/g, className: 'highlight' },
-        { pattern: /列举/g, className: 'highlight' },
-        { pattern: /改善/g, className: 'highlight' },
-        { pattern: /提高/g, className: 'highlight' },
-        { pattern: /特点/g, className: 'highlight' },
-        
-        // 数字和单位
-        { pattern: /\d+\.\d+Ω/g, className: 'highlight-number' },
-        { pattern: /\d+Ω/g, className: 'highlight-number' },
-        { pattern: /\d+V/g, className: 'highlight-number' },
-        { pattern: /\d+μ?m\/m/g, className: 'highlight-number' },
-        { pattern: /\d+～\d+/g, className: 'highlight-number' },
-        { pattern: /-\d+～\+\d+℃/g, className: 'highlight-number' },
-        
-        // 重要问题标记
-        { pattern: /什么是/g, className: 'highlight-important' },
-        { pattern: /简述/g, className: 'highlight-important' },
-        { pattern: /如何/g, className: 'highlight-important' },
-        { pattern: /为什么/g, className: 'highlight-important' },
-        { pattern: /试述/g, className: 'highlight-important' },
-        { pattern: /试比较/g, className: 'highlight-important' },
-    ];
-    
-    let highlightedText = questionText;
-    
-    // 应用所有高亮规则
-    questionKeywords.forEach(({ pattern, className }) => {
-        highlightedText = highlightedText.replace(pattern, match => 
-            `<span class="${className}">${match}</span>`
-        );
-    });
-    
-    return highlightedText;
-}
-
-// ===== 更新底部按钮文本 =====
-function updateFooterButton() {
-    const answerBtn = document.getElementById("answerBtn");
-    if (showAnswerMode) {
-        answerBtn.textContent = "隐藏答案";
-    } else {
-        answerBtn.textContent = "提交对答案";
-    }
-}
-
-// ===== 更新导航按钮状态 =====
-function updateNavButtons() {
-    const chapterQuestions = questionBank[currentChapter];
-    const chapters = Object.keys(questionBank);
-    const chapterIndex = chapters.indexOf(currentChapter);
-    
-    // 上一题按钮
-    if (currentQuestionIndex === 0 && chapterIndex === 0) {
-        document.getElementById("prevBtn").disabled = true;
-    } else {
-        document.getElementById("prevBtn").disabled = false;
-    }
-    
-    // 下一题按钮
-    if (currentQuestionIndex === chapterQuestions.length - 1 && chapterIndex === chapters.length - 1) {
-        document.getElementById("nextBtn").disabled = true;
-    } else {
-        document.getElementById("nextBtn").disabled = false;
-    }
-}
-
-// ===== 切换答案模式 =====
-function toggleAnswerMode() {
-    showAnswerMode = !showAnswerMode;
-    
-    // 如果显示答案，标记为已掌握
-    if (showAnswerMode) {
-        const questionKey = `${currentChapter}_${currentQuestionIndex}`;
-        masteredQuestions.add(questionKey);
-    }
-    
-    loadQuestion();
-}
-
-// ===== 题目导航 =====
-function prevQuestion() {
-    const chapters = Object.keys(questionBank);
-    
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-    } else {
-        // 如果是第一题，转到上一章的最后一题
-        const chapterIndex = chapters.indexOf(currentChapter);
-        if (chapterIndex > 0) {
-            currentChapter = chapters[chapterIndex - 1];
-            const prevChapterQuestions = questionBank[currentChapter];
-            currentQuestionIndex = prevChapterQuestions.length - 1;
-        }
-    }
-    
-    showAnswerMode = false;
-    updateChapterBar();
-    loadQuestion();
-}
-
-function nextQuestion() {
-    const chapters = Object.keys(questionBank);
-    const chapterQuestions = questionBank[currentChapter];
-    
-    if (currentQuestionIndex < chapterQuestions.length - 1) {
-        currentQuestionIndex++;
-    } else {
-        // 如果是最后一题，转到下一章的第一题
-        const chapterIndex = chapters.indexOf(currentChapter);
-        if (chapterIndex < chapters.length - 1) {
-            currentChapter = chapters[chapterIndex + 1];
-            currentQuestionIndex = 0;
-        } else {
-            // 如果是最后一章的最后一题，循环回到第一章
-            currentChapter = chapters[0];
-            currentQuestionIndex = 0;
-        }
-    }
-    
-    showAnswerMode = false;
-    updateChapterBar();
-    loadQuestion();
-}
-
-// ===== 更新进度 =====
-function updateProgress() {
-    const masteredCount = masteredQuestions.size;
-    document.getElementById("masteredText").textContent = `${masteredCount}/${stats.totalQuestions}`;
-}
-
-// ===== 初始化 =====
-function initialize() {
-    initializeChapters();
-    loadQuestion();
-    updateProgress();
-}
-
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', initialize);
-
-// 键盘快捷键
-document.addEventListener('keydown', function(e) {
-    switch(e.key) {
-        case 'ArrowLeft':
-            prevQuestion();
-            break;
-        case 'ArrowRight':
-            nextQuestion();
-            break;
-        case ' ':
-            toggleAnswerMode();
-            break;
-        case 'Enter':
-            toggleAnswerMode();
-            break;
-    }
-});
-</script>
-</body>
-</html>
+            a: "<span class='highlight-important'>空调传感器：</span>\n1. <span class='highlight'>温度传感器</span>：检测室内/室外环境温度、蒸发器温度等，控制<span class='highlight-important'>压缩机启停</span>和<span class='highlight-important'>风机速度</span>。\n2. <span class='highlight'>红外传感器</span>：接收<span class='highlight-important'>遥控信号</span>。
