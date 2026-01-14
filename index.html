@@ -3,23 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>刷试卷</title>
+<title>传感器习题集 - 填空题&解答题</title>
 
 <style>
 body {
     margin: 0;
     background: #f2f2f2;
     font-family: "Microsoft YaHei", sans-serif;
+    padding-bottom: 60px;
 }
 
 /* 顶部标题 */
 .header {
-    background: #fff;
-    padding: 14px;
+    background: #1976d2;
+    padding: 16px;
     text-align: center;
     font-size: 18px;
     font-weight: bold;
-    border-bottom: 1px solid #ddd;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* 章节栏 */
@@ -28,51 +30,175 @@ body {
     overflow-x: auto;
     background: #fff;
     border-bottom: 1px solid #ddd;
+    padding: 0 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .chapter-btn {
-    padding: 10px 16px;
+    padding: 12px 16px;
     font-size: 14px;
     white-space: nowrap;
     cursor: pointer;
+    border-bottom: 3px solid transparent;
 }
 
 .chapter-btn.active {
     color: #1976d2;
-    border-bottom: 2px solid #1976d2;
+    border-bottom: 3px solid #1976d2;
+    font-weight: bold;
 }
 
 /* 题目卡片 */
 .card {
     background: #fff;
-    margin: 12px;
-    padding: 16px;
-    border-radius: 8px;
+    margin: 16px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
 }
 
 .type {
     font-size: 14px;
     color: #666;
-    margin-bottom: 8px;
+    padding: 4px 12px;
+    background: #f5f5f5;
+    border-radius: 15px;
+}
+
+.question-number {
+    font-size: 14px;
+    color: #888;
 }
 
 .question {
     font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 12px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    min-height: 60px;
 }
 
-.option {
-    border: 1px solid #ddd;
-    border-radius: 6px;
+.question .blank {
+    display: inline-block;
+    min-width: 100px;
+    height: 32px;
+    border-bottom: 2px dashed #1976d2;
+    margin: 0 5px;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 32px;
+}
+
+/* 填空题输入区域 */
+.fill-blank {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #1976d2;
+}
+
+.fill-blank h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.answer-input {
+    width: 100%;
     padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
     margin-bottom: 10px;
 }
 
-.answer {
-    display: none;
-    margin-top: 12px;
+.answer-input:focus {
+    border-color: #1976d2;
+    outline: none;
+}
+
+/* 解答题样式 */
+.answer-area {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.answer-area h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
     color: #2e7d32;
+}
+
+.correct-answer {
+    white-space: pre-line;
+    line-height: 1.6;
+    padding: 15px;
+    background: #f1f8e9;
+    border-radius: 6px;
+    margin-top: 10px;
+    display: none;
+    border-left: 4px solid #4caf50;
+}
+
+/* 按钮样式 */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: #1976d2;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1565c0;
+}
+
+.btn-secondary {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background: #e9e9e9;
+}
+
+.btn-success {
+    background: #2e7d32;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #1b5e20;
 }
 
 /* 底部按钮 */
@@ -84,6 +210,8 @@ body {
     display: flex;
     background: #fff;
     border-top: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
 }
 
 .footer button {
@@ -91,32 +219,79 @@ body {
     padding: 14px;
     border: none;
     background: none;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.footer button:hover {
+    background: #f5f5f5;
 }
 
 .footer button:nth-child(2) {
     background: #333;
     color: #fff;
+    border-radius: 4px;
+    margin: 0 10px;
+}
+
+.footer button:nth-child(2):hover {
+    background: #555;
+}
+
+/* 统计信息 */
+.stats {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    color: #666;
+    background: #fff;
+    border-bottom: 1px solid #eee;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">传感器习题集</div>
+<div class="header">传感器习题集 - 刷题练习</div>
+
+<div class="stats">
+    已学习：<span id="learnedCount">0</span>题 | 正确率：<span id="accuracy">0%</span>
+</div>
 
 <div class="chapter-bar" id="chapters"></div>
 
 <div class="card">
-    <div class="type" id="type"></div>
+    <div class="question-header">
+        <span class="type" id="type">填空题</span>
+        <span class="question-number" id="questionNumber">第1题/共0题</span>
+    </div>
     <div class="question" id="question"></div>
-    <div id="options"></div>
-    <div class="answer" id="answer"></div>
+    
+    <!-- 填空题输入区域 -->
+    <div class="fill-blank" id="fillBlankArea" style="display: none;">
+        <h4>请填写答案：</h4>
+        <input type="text" class="answer-input" id="userAnswer" placeholder="请输入你的答案...">
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="checkAnswer()">提交答案</button>
+            <button class="btn btn-secondary" onclick="showHint()">查看提示</button>
+        </div>
+    </div>
+    
+    <!-- 解答题显示区域 -->
+    <div class="answer-area" id="essayArea" style="display: none;">
+        <h4>参考答案：</h4>
+        <div class="correct-answer" id="correctAnswer"></div>
+        <div class="button-group">
+            <button class="btn btn-success" onclick="showFullAnswer()">查看完整答案</button>
+            <button class="btn btn-secondary" onclick="markAsLearned()">标记为已掌握</button>
+        </div>
+    </div>
 </div>
 
 <div class="footer">
     <button onclick="prevQuestion()">上一题</button>
-    <button onclick="showAnswer()">提交对答案</button>
+    <button onclick="toggleAnswerMode()" id="toggleBtn">切换为解答题</button>
     <button onclick="nextQuestion()">下一题</button>
 </div>
 
@@ -125,144 +300,178 @@ body {
 const questionBank = {
     "第1章 概述": [
         {
-            q: "什么是传感器？",
-            a: "能够感受规定的被测量并按照一定规律转换成可用输出信号的器件和装置。"
+            q: "传感器是能够感受______并按照一定规律转换成可用输出信号的器件和装置。",
+            a: "规定的被测量",
+            hint: "根据国家标准GB7665-87的定义"
         },
         {
-            q: "传感器由哪几部分组成？",
-            a: "由敏感元件、转换元件、基本电路组成。"
+            q: "传感器由______、______和______三部分组成。",
+            a: "敏感元件、转换元件、基本电路",
+            hint: "传感器三大核心组成部分"
         },
         {
-            q: "简述传感器主要发展趋势。",
-            a: "现代传感器正朝着集成化、网络化、数字化、多功能化、微型化、智能化光机电一体化方向发展，具有高精度、高性能、高灵敏度、高可靠性、高稳定性、长寿命、高信噪比、宽量程、无维护的特点。"
+            q: "传感器主要发展趋势包括：______、网络化、数字化、______、微型化、智能化等。",
+            a: "集成化、多功能化",
+            hint: "现代传感器的发展方向"
         },
         {
-            q: "空调和电冰箱中采用了哪些传感器？它们分别起到什么作用？",
-            a: "空调：温度传感器检测温度控制压缩机；红外传感器接收遥控信号。电冰箱：温度传感器监测温度控制压缩机和除霜。"
+            q: "空调中的温度传感器用于检测______温度，控制______。",
+            a: "室内/室外环境和蒸发器、压缩机启停和风机速度",
+            hint: "空调传感器的功能"
         }
     ],
     "第2章 传感器的基本特性": [
         {
-            q: "传感器的静态特性是什么？由哪些性能指标描述？",
-            a: "静特性是当输入量为常数或变化极慢时，传感器的输入输出特性。主要指标有线性度、迟滞、重复性、分辨力、稳定性、温度稳定性、各种抗干扰稳定性。"
+            q: "传感器的静态特性是指当输入量为______时的输入输出特性。",
+            a: "常数或变化极慢",
+            hint: "静态特性的定义条件"
         },
         {
-            q: "传感器的线性度是如何确定的？确定拟合直线有哪些方法？",
-            a: "实际传感器有非线性存在，线性度是将近似后的拟合直线与实际曲线进行比较的最大偏差。方法有：理论线性度、端基线性度、独立线性度、最小二乘法线性度。"
+            q: "静态特性的主要指标包括：线性度、______、重复性、______、稳定性等。",
+            a: "迟滞、分辨力",
+            hint: "常用的静态性能指标"
         },
         {
-            q: "传感器的标定与校准有什么不同？",
-            a: "标定是通过实验确定传感器测量量和真实值之间的关系；校准是通过已知标准量对传感器进行调整使其输出更准确。"
+            q: "线性度是将近似后的______与实际曲线进行比较的最大偏差。",
+            a: "拟合直线",
+            hint: "线性度的计算方法"
+        },
+        {
+            q: "传感器的标定是通过实验确定传感器测量量和______之间的关系。",
+            a: "真实值",
+            hint: "标定的目的"
         }
     ],
     "第3章 电阻应变式传感器": [
         {
-            q: "何为电阻应变效应？",
-            a: "导体在受到拉力或压力的外界力作用时，会产生机械变形，同时机械变形会引起导体阻值的变化，这种导体材料因变形而使其电阻值发生变化的现象称为电阻应变效应。"
+            q: "导体因变形而使其电阻值发生变化的现象称为______。",
+            a: "电阻应变效应",
+            hint: "电阻变化与机械变形的关系"
         },
         {
-            q: "金属应变片与半导体应变片在工作原理上有何不同？",
-            a: "金属应变片利用机械形变产生的应变效应；半导体应变片主要利用半导体材料的压阻效应。半导体灵敏系数约为50～100，金属约为2。"
+            q: "金属应变片利用______效应，半导体应变片利用______效应。",
+            a: "应变、压阻",
+            hint: "两种应变片的工作原理区别"
+        },
+        {
+            q: "半导体应变片的灵敏系数范围约为______。",
+            a: "50～100",
+            hint: "半导体应变片的灵敏度特点"
         }
     ],
     "第4章 电容式传感器": [
         {
-            q: "如何改善单极式变极距型电容传感器的非线性？",
-            a: "采用差动结构，限制相对位移大小，限制初始极距，可提高灵敏度和改善非线性。"
+            q: "为改善单极式变极距型电容传感器的非线性，通常采用______结构。",
+            a: "差动",
+            hint: "改善线性的常用方法"
         },
         {
-            q: "为什么高频工作时的电容式传感器连接电缆的长度不能任意变化？",
-            a: "高频时容抗减小，电缆等效电感和电阻不可忽略，可能引起谐振，影响传感器正常工作。"
+            q: "高频工作时电容式传感器连接电缆长度不能任意变化，是因为______不可忽略。",
+            a: "电缆等效电感和电阻",
+            hint: "高频时的分布参数影响"
         }
     ],
     "第5章 电感式传感器": [
         {
-            q: "何谓电感式传感器？电感式传感器分为哪几类？",
-            a: "电感式传感器是利用线圈自感和互感的变化实现非电量电测的装置。种类：自感式、涡流式、差动式、变压式等。"
+            q: "电感式传感器利用线圈______和______的变化实现非电量电测。",
+            a: "自感、互感",
+            hint: "电感传感器的两种变化方式"
         },
         {
-            q: "提高电感式传感器线性度有哪些有效的方法？",
-            a: "采用差动形式，转换电路采用相敏检波电路可有效改善线性度。"
+            q: "提高电感式传感器线性度的有效方法是采用______形式和______电路。",
+            a: "差动、相敏检波",
+            hint: "改善线性的技术手段"
         },
         {
-            q: "什么叫电涡流效应？",
-            a: "块状金属导体置于变化的磁场中或在磁场中作用切割磁力线运动时，导体内部会产生一圈圈闭和的电流，这种电流叫电涡流，这种现象叫做电涡流效应。"
+            q: "金属导体在变化磁场中产生的闭合电流称为______。",
+            a: "电涡流",
+            hint: "电磁感应现象的名称"
         }
     ],
     "第6章 磁电式传感器": [
         {
-            q: "试述磁电感应式传感器的工作原理和结构形式。",
-            a: "工作原理基于电磁感应定律，当导体在磁场中运动切割磁力线或线圈中的磁通发生变化时，会产生感应电动势。结构形式主要有动圈式和动铁式。"
+            q: "磁电感应式传感器的工作原理基于______定律。",
+            a: "电磁感应",
+            hint: "基本的电磁学原理"
         },
         {
-            q: "什么是霍尔效应？",
-            a: "通电的导体（半导体）放在磁场中，电流与磁场垂直，在导体另外两侧会产生感应电动势，这种现象称霍尔效应。"
+            q: "霍尔效应是指通电导体在磁场中，在______方向产生感应电动势的现象。",
+            a: "与电流和磁场都垂直",
+            hint: "霍尔效应的方向特征"
         }
     ],
     "第7章 压电式传感器": [
         {
-            q: "什么是压电效应？什么是正压电效应和逆压电效应？",
-            a: "电介质在受到外力作用变形时，内部产生电极化现象产生电荷的现象称为压电效应。正压电效应：外力产生电荷；逆压电效应：电场产生机械变形。"
+            q: "电介质在受力变形时产生电荷的现象称为______。",
+            a: "压电效应",
+            hint: "压电现象的名称"
         },
         {
-            q: "为什么压电器件一定要高阻抗输出？",
-            a: "为了匹配高阻抗负载，提高信号传输效率，防止电荷泄漏导致信号失真。"
+            q: "压电器件需要高阻抗输出，主要是为了匹配______负载。",
+            a: "高阻抗",
+            hint: "阻抗匹配的要求"
         }
     ],
     "第8章 光电效应及器件": [
         {
-            q: "什么是内光电效应？什么是外光电效应？",
-            a: "内光电效应：光线照在物体上使电导率变化或产生光生电动势，包括光电导效应和光生伏特效应。外光电效应：在光线作用下，物体内的电子逸出物体表面向外发射。"
+            q: "内光电效应包括______效应和______效应。",
+            a: "光电导、光生伏特",
+            hint: "内光电效应的两种类型"
         },
         {
-            q: "什么是光敏电阻的亮电阻和暗电阻？",
-            a: "暗电阻：无光照时的电阻，一般为0.5～200MΩ；亮电阻：受光照时的电阻，一般为0.5～20KΩ。"
+            q: "光敏电阻的暗电阻通常为______量级。",
+            a: "0.5～200MΩ",
+            hint: "暗电阻的典型范围"
         }
     ],
     "第9章 新型光电传感器": [
         {
-            q: "CCD主要由哪两部分组成？",
-            a: "MOS光敏元阵列、读出移位寄存器。"
+            q: "CCD主要由______和______组成。",
+            a: "MOS光敏元阵列、读出移位寄存器",
+            hint: "CCD的两个主要部分"
         },
         {
-            q: "光纤传感器有哪两大类型？",
-            a: "传光型，功能型。"
+            q: "光纤传感器分为______型和______型两大类。",
+            a: "传光、功能",
+            hint: "光纤传感器的分类"
         }
     ],
     "第10章 半导体式化学传感器": [
         {
-            q: "什么是半导体气体传感器？",
-            a: "利用半导体材料与气体接触时电阻或功函数变化的原理制成的气体检测传感器。"
+            q: "半导体气体传感器是利用半导体材料与气体接触时______变化的原理。",
+            a: "电阻或功函数",
+            hint: "半导体气体传感器的工作原理"
         }
     ],
     "第12章 热电式传感器": [
         {
-            q: "什么是热电效应？",
-            a: "两种不同类型的金属导体两端分别接在一起构成闭合回路，当两个结点有温差时，导体回路里会产生热电势的现象。"
+            q: "热电偶测温回路的热电势主要由______电势和______电势组成。",
+            a: "接触、温差",
+            hint: "热电势的两个组成部分"
         },
         {
-            q: "试比较热电偶、热电阻、热敏电阻三种热电式传感器的特点。",
-            a: "热电偶：可测上千度高温，精度高；热电阻：结构简单，用于-200～+850℃；热敏电阻：半导体材料制成，用途广泛，多用于家用电器。"
+            q: "热电阻多用于测量______温度范围。",
+            a: "-200～+850℃",
+            hint: "热电阻的典型应用范围"
         }
     ],
     "第14章 生物传感器": [
         {
-            q: "常见生物传感器有哪些？",
-            a: "酶传感器、微生物传感器、细胞传感器、免疫传感器、组织传感器。"
+            q: "常见的生物传感器包括：酶传感器、______传感器、细胞传感器等。",
+            a: "微生物",
+            hint: "生物传感器的一种类型"
         }
     ],
     "第15章 集成智能传感器": [
         {
-            q: "什么是智能传感器？",
-            a: "智能传感器是集成传感器、微处理器、通信模块及软件算法的系统级产品，具备信息采集、处理、交换和存储能力。"
+            q: "智能传感器是集成传感器、______、通信模块及软件算法的系统级产品。",
+            a: "微处理器",
+            hint: "智能传感器的核心组成部分"
         },
         {
-            q: "集成智能传感器的主要特点是什么？",
-            a: "集成度高，体积小，将敏感元件、信号调理电路及微处理器集成在同一芯片上。"
-        },
-        {
-            q: "为什么集成智能传感器是现代传感器技术的主要发展趋势？",
-            a: "技术融合推动智能化、微型化发展；应用需求对精度可靠性要求提高；集成化设计降低成本；微机械加工和集成电路工艺的进步使其成为可能。"
+            q: "集成智能传感器的主要特点是______高，体积小。",
+            a: "集成度",
+            hint: "集成化的优势"
         }
     ]
 };
@@ -270,7 +479,12 @@ const questionBank = {
 let currentChapter = "第1章 概述";
 let currentList = questionBank[currentChapter];
 let currentIndex = 0;
-let currentAnswer = "";
+let isEssayMode = false; // false:填空题模式, true:解答题模式
+let stats = {
+    learned: new Set(),
+    correct: new Set(),
+    attempted: new Set()
+};
 
 // ===== 初始化章节按钮 =====
 const chapterBar = document.getElementById("chapters");
@@ -288,76 +502,178 @@ function switchChapter(chapter, btn) {
     currentIndex = 0;
     document.querySelectorAll(".chapter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    showQuestion(currentIndex);
+    updateQuestion();
+    updateStats();
 }
 
 // ===== 显示题目 =====
-function showQuestion(index) {
-    document.getElementById("answer").style.display = "none";
-    document.getElementById("options").innerHTML = "";
+function updateQuestion() {
+    const questionNumber = document.getElementById("questionNumber");
+    questionNumber.textContent = `第${currentIndex + 1}题/共${currentList.length}题`;
     
     if (currentList.length === 0) {
         document.getElementById("question").innerText = "本章暂无题目";
+        document.getElementById("fillBlankArea").style.display = 'none';
+        document.getElementById("essayArea").style.display = 'none';
         return;
     }
     
-    if (index < 0) index = currentList.length - 1;
-    if (index >= currentList.length) index = 0;
-    currentIndex = index;
-    
     const item = currentList[currentIndex];
-    document.getElementById("type").innerText = "简答题";
-    document.getElementById("question").innerText = item.q;
+    document.getElementById("question").innerHTML = item.q;
     
-    // 为简答题生成三个干扰选项
-    const allAnswers = getAllAnswers();
-    const otherAnswers = allAnswers.filter(a => a !== item.a);
-    const shuffledOthers = shuffle(otherAnswers).slice(0, 3);
-    const options = shuffle([item.a, ...shuffledOthers]);
+    // 切换模式
+    if (isEssayMode) {
+        // 解答题模式
+        document.getElementById("type").textContent = "解答题";
+        document.getElementById("toggleBtn").textContent = "切换为填空题";
+        document.getElementById("fillBlankArea").style.display = 'none';
+        document.getElementById("essayArea").style.display = 'block';
+        
+        // 如果是填空题，在解答题模式下直接显示答案
+        document.getElementById("correctAnswer").innerHTML = 
+            `<strong>题目：</strong>${item.q.replace(/_+/g, '<span class="blank">_____</span>')}<br><br>
+             <strong>参考答案：</strong>${item.a}`;
+        document.getElementById("correctAnswer").style.display = 'none';
+    } else {
+        // 填空题模式
+        document.getElementById("type").textContent = "填空题";
+        document.getElementById("toggleBtn").textContent = "切换为解答题";
+        document.getElementById("fillBlankArea").style.display = 'block';
+        document.getElementById("essayArea").style.display = 'none';
+        document.getElementById("userAnswer").value = '';
+        document.getElementById("userAnswer").focus();
+    }
     
-    options.forEach(o => {
-        const div = document.createElement("div");
-        div.className = "option";
-        div.innerText = o;
-        document.getElementById("options").appendChild(div);
-    });
-    
-    currentAnswer = "正确答案：" + item.a;
+    // 更新掌握状态
+    const questionKey = `${currentChapter}_${currentIndex}`;
+    if (stats.learned.has(questionKey)) {
+        document.getElementById("question").style.color = "#2e7d32";
+    } else {
+        document.getElementById("question").style.color = "#333";
+    }
 }
 
-// 获取所有题库中的答案用于生成干扰选项
-function getAllAnswers() {
-    const answers = [];
-    Object.values(questionBank).forEach(chapter => {
-        chapter.forEach(item => {
-            if (!answers.includes(item.a)) {
-                answers.push(item.a);
-            }
-        });
-    });
-    return answers;
+// ===== 检查填空题答案 =====
+function checkAnswer() {
+    const userAnswer = document.getElementById("userAnswer").value.trim();
+    const correctAnswer = currentList[currentIndex].a;
+    const questionKey = `${currentChapter}_${currentIndex}`;
+    
+    stats.attempted.add(questionKey);
+    
+    // 简单比较答案（实际使用可能需要更复杂的匹配）
+    if (userAnswer.toLowerCase() === correctAnswer.toLowerCase() || 
+        correctAnswer.includes(userAnswer) ||
+        userAnswer.length > 0 && correctAnswer.toLowerCase().includes(userAnswer.toLowerCase())) {
+        alert("✓ 回答正确！");
+        stats.correct.add(questionKey);
+        stats.learned.add(questionKey);
+        document.getElementById("question").style.color = "#2e7d32";
+    } else {
+        alert(`✗ 回答不正确。\n提示：${currentList[currentIndex].hint || "请再仔细思考一下"}`);
+    }
+    
+    updateStats();
+    nextQuestion(); // 自动进入下一题
 }
 
-function showAnswer() {
-    const a = document.getElementById("answer");
-    a.innerText = currentAnswer;
-    a.style.display = "block";
+// ===== 显示提示 =====
+function showHint() {
+    const hint = currentList[currentIndex].hint || "暂无提示";
+    alert(`💡 提示：${hint}`);
 }
 
+// ===== 显示完整答案（解答题模式） =====
+function showFullAnswer() {
+    document.getElementById("correctAnswer").style.display = 'block';
+}
+
+// ===== 标记为已掌握 =====
+function markAsLearned() {
+    const questionKey = `${currentChapter}_${currentIndex}`;
+    stats.learned.add(questionKey);
+    document.getElementById("question").style.color = "#2e7d32";
+    alert("已标记为已掌握题目");
+    updateStats();
+}
+
+// ===== 切换答题模式 =====
+function toggleAnswerMode() {
+    isEssayMode = !isEssayMode;
+    updateQuestion();
+}
+
+// ===== 导航题目 =====
 function prevQuestion() {
-    showQuestion(currentIndex - 1);
+    if (currentIndex > 0) {
+        currentIndex--;
+    } else {
+        currentIndex = currentList.length - 1;
+    }
+    updateQuestion();
 }
 
 function nextQuestion() {
-    showQuestion(currentIndex + 1);
+    if (currentIndex < currentList.length - 1) {
+        currentIndex++;
+    } else {
+        currentIndex = 0;
+        // 如果到最后一题，提示是否循环
+        if (currentIndex === 0 && currentList.length > 1) {
+            if (confirm("已经是最后一题，是否从头开始？")) {
+                updateQuestion();
+            }
+            return;
+        }
+    }
+    updateQuestion();
 }
 
-function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
+// ===== 更新统计信息 =====
+function updateStats() {
+    const totalLearned = stats.learned.size;
+    const totalAttempted = stats.attempted.size;
+    const accuracy = totalAttempted > 0 ? 
+        Math.round((stats.correct.size / totalAttempted) * 100) : 0;
+    
+    document.getElementById("learnedCount").textContent = totalLearned;
+    document.getElementById("accuracy").textContent = `${accuracy}%`;
 }
 
-// 初始化显示第一题
-showQuestion(0);
+// 初始化
+updateQuestion();
+updateStats();
+
+// 键盘快捷键支持
+document.addEventListener('keydown', function(e) {
+    switch(e.key) {
+        case 'ArrowLeft':
+            prevQuestion();
+            break;
+        case 'ArrowRight':
+            nextQuestion();
+            break;
+        case ' ':
+            if (isEssayMode) {
+                showFullAnswer();
+            } else {
+                checkAnswer();
+            }
+            e.preventDefault();
+            break;
+        case 'm':
+        case 'M':
+            toggleAnswerMode();
+            break;
+    }
+});
+
+// 输入框回车提交
+document.getElementById('userAnswer').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkAnswer();
+    }
+});
 </script>
 </body>
 </html>
